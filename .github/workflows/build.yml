@@ -13,8 +13,6 @@ on:
   workflow_dispatch:
 
 env:
-  # The main LaTeX file to build. Change this if you rename the main .tex file.
-  MAIN_FILE: assignment
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,7 +31,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run pdflatex
         run: |
-          make all MAIN_FILE=${{ env.MAIN_FILE }}
+          make
 
       # Runs a set of commands using the runners shell
       - name: Upload PDF
