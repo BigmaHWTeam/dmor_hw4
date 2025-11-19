@@ -13,14 +13,11 @@ minimize Time:
 subject to every_engine_starts_once {i in E}:
     sum {j in E} x[i,j] = 1;
 
-subject to every_engine_ends_once {j in E: j <> 0}:
+subject to every_engine_ends_once {j in E}:
     sum {i in E} x[i,j] = 1;
 
 subject to no_self_switch {i in E}:
     x[i,i] = 0;
-
-subject to there_is_no_engine_zero {i in E}:
-    x[i,0] = 0;
 
 subject to valid_type {i in E}:
     t[i] in T;
