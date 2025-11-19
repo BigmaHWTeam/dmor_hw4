@@ -1,0 +1,39 @@
+\section{Scheduling}
+\begin{enumerate}
+	\item The problem can be formulated as follows:
+
+    Sets:
+    \begin{itemize}
+      \item $E$: the set of engines
+      \item $T$: the set of engine types
+    \end{itemize}
+
+    Parameters:
+    \begin{itemize}
+      \item $s_{ij}$:  the switchover time from engine $i \in
+        E to engine j \in E$. If $i=0 $ then this is the setup time for engine.
+      \item $p_{i}$:   the processing time for engine $i \in E$
+      \item $t_{i}$:   the type of engine $i \in E$
+    \end{itemize}
+
+    Decision variables:
+    \begin{itemize}
+      \item $x_{ij}$: yes or no on whether to do the switchover (or setup) of 
+        engine $i \in E$ to engine $j \in E$
+    \end{itemize}
+
+    Compact formulation capturing objective function and constraints:
+    \begin{center}
+      \begin{align*}
+        \min\quad & \sum_{i \in E} \sum_{j \in E} x_{ij}(s_{ij} + p_{j})
+        \\
+        \text{s.t.}\quad
+        & \sum_{j \in e} x_{ij} = 1,\; \quad \forall i \in \{0...|E-1|\}
+        \\
+        & \sum_{i \in e} x_{ij} = 1,\; \quad \forall j \in \{1...|E|\}
+        \\
+        & x_{ij} \in \{0,1\},\; \forall i,j \in E, i \neq j
+      \end{align*}
+    \end{center}
+
+\end{enumerate}
