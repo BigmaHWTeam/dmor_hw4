@@ -38,6 +38,7 @@
     };
     latex = pkgs.mkShell {
       packages = [
+        pkgs.texlivePackages.latexmk
         (pkgs.texliveSmall.withPackages (
           ps:
             with ps; [

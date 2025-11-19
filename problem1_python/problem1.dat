@@ -1,0 +1,18 @@
+set Suppliers := A B C;
+set Tiers := 1 2;
+
+param demand 1000;
+param Tier_Quantities :=
+  [A,1] 200
+  [A,2] 500
+  [B,1] Infinity
+  [C,1] 150
+  [C,2] 400
+;
+param Tier_Costs :=
+  [A,1] 60
+  [A,2] 50
+  [B,1] 55
+  [C,1] 75
+  [C,2] 38
+;

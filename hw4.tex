@@ -8,7 +8,8 @@
 \input{header} 
 \begin{document}
 % \maketitle
-\section*{A Section}
+\renewcommand{\thesection}{Problem \arabic{section}:}
+\renewcommand{\thesubsection}{Part \arabic{section}.\arabic{subsection}:}
 \input{problem1}
 \pagebreak
 \input{appendix}

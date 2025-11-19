@@ -12,5 +12,6 @@
 *.fls
 *.ps
 build/
+ampl/
 .vscode/
 .direnv/

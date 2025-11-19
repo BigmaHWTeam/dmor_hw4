@@ -1,6 +1,42 @@
-\begin{problem}{}{}
-  This is a problem with a solution.
-  \begin{center}
-    \boxed{y=2x+2}
-  \end{center}
-\end{problem}
+\section{}
+\subsection{}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Part} & \textbf{Quantity} & \textbf{Prepreg/part (kg)} & \textbf{Prepreg/assembly (kg)}\\
+        \midrule
+        Fuselage panel & 15 & 30 & 450\\
+        Wing skin & 20 & 20 & 400 \\
+        Tail cone section & 15 & 10 & 150 \\
+        \bottomrule
+        Total & & & 1000
+    \end{tabular}
+    \caption{Prepreg requirements for aerospace parts.}
+    \label{tab:prepreg_req}
+\end{table}
+%This section is for the typeset model
+\subsection{}
+
+\subsection{}
+An ampl model has been created to solve this linear program. It is included as listing \ref{lst:problem1mod}. Listing 
+\ref{lst:problem1dat} contains the relevant data used for the model and the output of the model is contained in 
+\ref{lst:problem1out}. The python code to run the model and generate output can be found in \ref{append:p1}.
+\begin{tcolorbox}
+    \lstinputlisting[numbers=left, numberstyle=\tiny,
+        stepnumber=2, numbersep=5pt,
+        basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem1mod},
+        caption={An AMPL model for problem 1.}]{problem1_python/problem1.mod}
+\end{tcolorbox}
+\begin{tcolorbox}
+    \lstinputlisting[numbers=left, numberstyle=\tiny,
+        stepnumber=2, numbersep=5pt,
+        basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem1dat},
+        caption={The ampl data for problem 1.}]{problem1_python/problem1.dat}
+\end{tcolorbox}
+\begin{tcolorbox}
+    \lstinputlisting[numbers=left, numberstyle=\tiny,
+        stepnumber=2, numbersep=5pt,
+        basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem1out},
+        caption={The ampl data for problem 1.}]{ampl/problem1.amplout}
+\end{tcolorbox}
