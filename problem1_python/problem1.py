@@ -41,35 +41,36 @@ def run_ampl_model(model_file, data_file):
 
     # Get all necessary variables and parameters as dictionaries for easy access
     x = ampl.get_variable("x").get_values().to_dict()
-    x_a_tier = ampl.get_variable("x_A_Tier").get_values().to_dict()
-    x_c_tier = ampl.get_variable("x_C_Tier").get_values().to_dict()
     tier_costs = ampl.get_parameter("Tier_Costs").get_values().to_dict()
 
     # --- Supplier A Details ---
-    if x.get('A', 0) > 0.001:
-        output_lines.append(f"  - Supplier A: {int(round(x['A']))} units")
-        if x_a_tier.get(1, 0) > 0.001:
+    total_A = x.get(('A', 1), 0) + x.get(('A', 2), 0)
+    if total_A > 0.001:
+        output_lines.append(f"  - Supplier A: {int(round(total_A))} units")
+        if x.get(('A', 1), 0) > 0.001:
             cost = tier_costs.get(('A', 1), 0)
-            output_lines.append(f"      - Tier 1 Active: {int(round(x_a_tier[1]))} units @ ${cost:.2f}/unit")
-        if x_a_tier.get(2, 0) > 0.001:
+            output_lines.append(f"      - Tier 1 Active: {int(round(x[('A', 1)]))} units @ ${cost:.2f}/unit")
+        if x.get(('A', 2), 0) > 0.001:
             cost = tier_costs.get(('A', 2), 0)
-            output_lines.append(f"      - Tier 2 Active: {int(round(x_a_tier[2]))} units @ ${cost:.2f}/unit")
+            output_lines.append(f"      - Tier 2 Active: {int(round(x[('A', 2)]))} units @ ${cost:.2f}/unit")
 
     # --- Supplier B Details ---
-    if x.get('B', 0) > 0.001:
+    total_B = x.get(('B', 1), 0)
+    if total_B > 0.001:
         cost = tier_costs.get(('B', 1), 0)
-        output_lines.append(f"  - Supplier B: {int(round(x['B']))} units")
+        output_lines.append(f"  - Supplier B: {int(round(total_B))} units")
         output_lines.append(f"      - Fixed Rate: ${cost:.2f}/unit")
 
     # --- Supplier C Details ---
-    if x.get('C', 0) > 0.001:
-        output_lines.append(f"  - Supplier C: {int(round(x['C']))} units")
-        if x_c_tier.get(1, 0) > 0.001:
+    total_C = x.get(('C', 1), 0) + x.get(('C', 2), 0)
+    if total_C > 0.001:
+        output_lines.append(f"  - Supplier C: {int(round(total_C))} units")
+        if x.get(('C', 1), 0) > 0.001:
             cost = tier_costs.get(('C', 1), 0)
-            output_lines.append(f"      - Purchased in Tier 1: {int(round(x_c_tier[1]))} units @ ${cost:.2f}/unit")
-        if x_c_tier.get(2, 0) > 0.001:
+            output_lines.append(f"      - Purchased in Tier 1: {int(round(x[('C', 1)]))} units @ ${cost:.2f}/unit")
+        if x.get(('C', 2), 0) > 0.001:
             cost = tier_costs.get(('C', 2), 0)
-            output_lines.append(f"      - Purchased in Tier 2: {int(round(x_c_tier[2]))} units @ ${cost:.2f}/unit")
+            output_lines.append(f"      - Purchased in Tier 2: {int(round(x[('C', 2)]))} units @ ${cost:.2f}/unit")
     
     # --- Print to console ---
     print("--- Results ---")

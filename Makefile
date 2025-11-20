@@ -34,6 +34,7 @@ $(AMPL_OUTPUT_DIR):
 
 # Clean up generated files
 clean:
+	rm -rf build ampl
 	rm -f *.aux *.bbl *.bcf *.blg *.dvi *.fdb_latexmk *.fls *.log *.out *.pdf *.ps *.run.xml
 	rm -f $(PROBLEM1_AMPLOUT)
 

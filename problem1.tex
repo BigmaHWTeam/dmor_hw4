@@ -15,11 +15,43 @@
     \caption{Prepreg requirements for aerospace parts.}
     \label{tab:prepreg_req}
 \end{table}
-%This section is for the typeset model
 \subsection{}
+Sets: 
+\begin{itemize}
+\item $S$: The set of suppliers: a, b, and c.
+\item $T$: The set of tiers: 1, and 2. 
+\end{itemize}
+Decision Variables:
+\begin{itemize}
+\item $x_{s,t}$: quantity of prepreg purchased from supplier $s$ in tier $t$.
+\item $y_{s,t}$: binary variable if tier t is used from supplier s.
+\end{itemize}
+Parameters:
+\begin{itemize}
+  \item $d$: total demand for prepreg.
+  \item $q_{s,t}$: tier quantities for tier t at supplier s.
+  \item $c_{s,t}$: prepreg cost per kg in tier t at supplier s.
+\end{itemize}
+\pagebreak
+\[
+  \text{minimize} \sum_{s \in S}\sum_{t \in T} c_{s,t} x_{s,t}
+\]
+\begin{align*}
+  \text{s.t. } & \sum_{s \in S}\sum_{t \in T}x_{s,t}=d \\
+  & \sum_{t \in T}y_{a,t} \le 1 \\
+  & x_{a,1} \le q_{a,1}y_{a,1} \\
+  & x_{a,2} \ge (q_{a,1}+1)y_{a,2} \\
+  & x_{a,2} \le q_{a,2}y_{a,2} \\ 
+  & x_{b,2} = 0 \\
+  & x_{c,1} \le q_{c,1} \\
+  & x_{c,1} \ge q_{c,1}y_{c,2} \\
+  & x_{c,2} \le (q_{c,2}-q_{c,1})y_{c,2} \\
+  & x_{s,t} \in \{0,\mathbb{Z}^+\} \forall \, s \in S, t \in T \\ 
+  & y_{s,t} \in \{0,1\} \forall   \, s \in S, t \in T  
+\end{align*}
 
 \subsection{}
-An ampl model has been created to solve this linear program. It is included as listing \ref{lst:problem1mod}. Listing 
+An AMPL model has been created to solve this linear program. It is included as listing \ref{lst:problem1mod}. Listing 
 \ref{lst:problem1dat} contains the relevant data used for the model and the output of the model is contained in 
 \ref{lst:problem1out}. The python code to run the model and generate output can be found in \ref{append:p1}.
 \begin{tcolorbox}
@@ -32,11 +64,11 @@ An ampl model has been created to solve this linear program. It is included as l
     \lstinputlisting[numbers=left, numberstyle=\tiny,
         stepnumber=2, numbersep=5pt,
         basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem1dat},
-        caption={The ampl data for problem 1.}]{problem1_python/problem1.dat}
+        caption={The AMPL data for problem 1.}]{problem1_python/problem1.dat}
 \end{tcolorbox}
 \begin{tcolorbox}
     \lstinputlisting[numbers=left, numberstyle=\tiny,
         stepnumber=2, numbersep=5pt,
         basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem1out},
-        caption={The ampl data for problem 1.}]{ampl/problem1.amplout}
+        caption={The AMPL output for problem 1.}]{ampl/problem1.amplout}
 \end{tcolorbox}
