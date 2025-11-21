@@ -40,12 +40,22 @@ def run_ampl_model(model_file, data_file):
     output_lines.append("Test Plan:")
 
     # Get all necessary variables and parameters as dictionaries for easy access
-    x = ampl.get_variable("x").get_values().to_dict()
-    for (i, j), val in x.items():
-        if val == 1:
-            output_lines.append(f"  - Switch from Engine {i} to Engine {j}")
-            output_lines.append(f"      - Switchover Time: {ampl.get_parameter('s').get(i,j)}")
-            output_lines.append(f"      - Processing Time: {ampl.get_parameter('p').get(j)}")
+    visitOrder = ampl.get_variable("visitOrder").get_values().to_dict()
+    for i in sorted(visitOrder, key=lambda k: visitOrder[k]):
+        if visitOrder[i] >= 1:
+            output_lines.append(f"  - Switch from Engine {j} to Engine {i}")
+            output_lines.append(f"      - Switchover Time: {ampl.get_parameter('s').get(j,i)}")
+            output_lines.append(f"      - Processing Time: {ampl.get_parameter('p').get(i)}")
+        j = i
+    
+        
+    # x = ampl.get_variable("x").get_values().to_dict()
+    # for (i, j), val in x.items():
+    #     if val == 1:
+    #         output_lines.append(f"  - Switch from Engine {i} to Engine {j}")
+    #         output_lines.append(f"      - Switchover Time: {ampl.get_parameter('s').get(i,j)}")
+    #         output_lines.append(f"      - Processing Time: {ampl.get_parameter('p').get(j)}")
+    
     # x_a_tier = ampl.get_variable("x_A_Tier").get_values().to_dict()
     # x_c_tier = ampl.get_variable("x_C_Tier").get_values().to_dict()
     # tier_costs = ampl.get_parameter("Tier_Costs").get_values().to_dict()
