@@ -32,21 +32,16 @@ The primary way to build the project is by using the `Makefile`.
     make clean
     ```
 
-### Running Python Scripts Manually
+### Testing Changes
 
-You can also run the Python scripts directly. For example, to run the script for problem 1:
+When making changes to the Python scripts, the preferred method for testing is to rebuild the entire PDF document to ensure that the generated outputs are correctly integrated into the final report.
 
+You can do this by running:
 ```bash
-cd problem1_python
-python problem1.py
+make
 ```
 
-This will solve the optimization problem and print the results to the console. To generate the output file used by the LaTeX build, you need to set the `AMPLHW_OUTPUT` environment variable:
-
-```bash
-cd problem1_python
-AMPLHW_OUTPUT=true python problem1.py
-```
+This ensures that any visual outputs, such as Gantt charts, are regenerated and correctly embedded in the LaTeX document.
 
 ## Key Files
 
@@ -67,3 +62,4 @@ AMPLHW_OUTPUT=true python problem1.py
 *   **Problem-Specific Directories:** Code for each problem is contained within its own directory (e.g., `problem1_python/`).
 *   **Separation of Concerns:** The optimization model (`.mod`), data (`.dat`), and solving logic (`.py`) are kept in separate files.
 *   **Automated Builds:** All build steps are codified in the `Makefile` to ensure a consistent and reliable build process.
+*   **Styling:** Visual elements, such as charts and graphs, should adhere to the University of Florida's brand guidelines. The official color palette can be found at the [UF Brand Center](https://brandcenter.ufl.edu/colors/#gradients).

@@ -1,13 +1,11 @@
 \section{Scheduling}
-\begin{enumerate}
-	\item The problem can be formulated as follows:
-
+\subsection{}
+	The problem can be formulated as follows:
     Sets:
     \begin{itemize}
       \item $E$: the set of engines
       \item $T$: the set of engine types
     \end{itemize}
-
     Parameters:
     \begin{itemize}
       \item $s_{ij}$:  the switchover time from engine $i \in
@@ -15,7 +13,6 @@
       \item $p_{i}$:   the processing time for engine $i \in E$
       \item $t_{i}$:   the type of engine $i \in E$
     \end{itemize}
-
     Decision variables:
     \begin{itemize}
       \item $x_{ij}$: yes or no on whether to do the switchover (or setup) of 
@@ -35,5 +32,48 @@
         & x_{ij} \in \{0,1\},\; \forall i,j \in E, i \neq j
       \end{align*}
     \end{center}
-
-\end{enumerate}
+\subsection{}
+An AMPL model has been created to solve this linear program. It is included as listing \ref{lst:problem2mod}. Listing 
+\ref{lst:problem2dat} contains the relevant data used for the model and the output of the model is contained in 
+listing \ref{lst:problem2out}. The python code to run the model and generate output can be found in \ref{append:p2}.
+\begin{tcolorbox}
+    \lstinputlisting[numbers=left, numberstyle=\tiny,
+        stepnumber=2, numbersep=5pt,
+        basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem2mod},
+        caption={An AMPL model for problem 2.}]{problem2_python/problem2.mod}
+\end{tcolorbox}
+\begin{tcolorbox}
+    \lstinputlisting[numbers=left, numberstyle=\tiny,
+        stepnumber=2, numbersep=5pt,
+        basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem2dat},
+        caption={The AMPL data for problem 2.}]{problem2_python/problem2.dat}
+\end{tcolorbox}
+\begin{tcolorbox}
+    \lstinputlisting[numbers=left, numberstyle=\tiny,
+        stepnumber=2, numbersep=5pt,
+        basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem2out},
+        caption={The AMPL output for problem 2.}]{ampl/problem2.amplout}
+\end{tcolorbox}
+\subsection{}
+A Gantt chart for the optimal production sequence has been included in Figure \ref{fig:problem2_3}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/problem2_optimal_gantt.pdf}
+    \caption{Optimal Gantt Chart}
+    \label{fig:problem2_3}
+\end{figure}
+\subsection{}
+Gantt charts for the greedy (shortest setup time) and commercial first production schedule have been
+included as figures \ref{fig:problem2_4a} and \ref{fig:problem2_4b} respectively.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/problem2_optimal_gantt.pdf}
+    \caption{Greedy Gantt Chart}
+    \label{fig:problem2_4a}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/problem2_commercial_first_gantt.pdf}
+    \caption{Commercial First Gantt Chart}
+    \label{fig:problem2_4b}
+\end{figure}
