@@ -8,8 +8,8 @@
     \end{itemize}
     Parameters:
     \begin{itemize}
-      \item $s_{ij}$:  the switchover time from engine $i \in
-        E to engine j \in E$. If $i=0 $ then this is the setup time for engine.
+      \item $s_{ij}$:  the switchover time from engine $i \in E$ to engine $j \in E$.
+        \\ If $i=0 $ then this is actually the setup time for engine $i \in E$.
       \item $p_{i}$:   the processing time for engine $i \in E$
       \item $t_{i}$:   the type of engine $i \in E$
     \end{itemize}
@@ -17,6 +17,7 @@
     \begin{itemize}
       \item $x_{ij}$: yes or no on whether to do the switchover (or setup) of 
         engine $i \in E$ to engine $j \in E$
+      \item $v_{i}$: the order in which engine $i \in E$ is visited
     \end{itemize}
 
     Compact formulation capturing objective function and constraints:
@@ -25,11 +26,21 @@
         \min\quad & \sum_{i \in E} \sum_{j \in E} x_{ij}(s_{ij} + p_{j})
         \\
         \text{s.t.}\quad
-        & \sum_{j \in e} x_{ij} = 1,\; \quad \forall i \in \{0...|E-1|\}
+        & \sum_{i \in E} x_{ij} = 1,\; \quad \forall j \in E
         \\
-        & \sum_{i \in e} x_{ij} = 1,\; \quad \forall j \in \{1...|E|\}
+        & \sum_{j \in E} x_{ij} = 1,\; \quad \forall i \in E
+        \\
+        & x_{i,i} = 0,\; \quad \forall i \in E
+        \\
+        & s_{i,j} \geq 0,\; \quad \forall i,j \in E
+        \\
+        & p_{i} \geq 0,\; \quad \forall i \in E
+        \\
+        & t_{i} \in T,\; \quad \forall i \in E
         \\
         & x_{ij} \in \{0,1\},\; \forall i,j \in E, i \neq j
+        \\
+        & 0 \leq v_{i} \leq \abs{E},\; \forall i \in E
       \end{align*}
     \end{center}
 \subsection{}

@@ -128,7 +128,7 @@ def solve_model(model_file, data_file):
     print("Solve complete.\n")
 
     objective_value = ampl.get_objective('Time').value()
-    visit_order = ampl.get_variable("visitOrder").get_values().to_dict()
+    visit_order = ampl.get_variable("v").get_values().to_dict()
 
     # Determine the optimal sequence
     sorted_engines = sorted(
@@ -143,54 +143,6 @@ def solve_model(model_file, data_file):
     output_lines.append("-" * 30)
     seq_str = " -> ".join(map(str, optimal_sequence))
     output_lines.append(f"Optimal Production Sequence: {seq_str}")
-
-    # Get all necessary variables and parameters as dictionaries for easy access
-    visitOrder = ampl.get_variable("visitOrder").get_values().to_dict()
-    # for i in sorted(visitOrder, key=lambda k: visitOrder[k]):
-    #     if visitOrder[i] >= 1:
-    #         output_lines.append(f"  - Switch from Engine {j} to Engine {i}")
-    #         output_lines.append(f"      - Switchover Time: {ampl.get_parameter('s').get(j,i)}")
-    #         output_lines.append(f"      - Processing Time: {ampl.get_parameter('p').get(i)}")
-    #     j = i
-    
-        
-    # x = ampl.get_variable("x").get_values().to_dict()
-    # for (i, j), val in x.items():
-    #     if val == 1:
-    #         output_lines.append(f"  - Switch from Engine {i} to Engine {j}")
-    #         output_lines.append(f"      - Switchover Time: {ampl.get_parameter('s').get(i,j)}")
-    #         output_lines.append(f"      - Processing Time: {ampl.get_parameter('p').get(j)}")
-    
-    # x_a_tier = ampl.get_variable("x_A_Tier").get_values().to_dict()
-    # x_c_tier = ampl.get_variable("x_C_Tier").get_values().to_dict()
-    # tier_costs = ampl.get_parameter("Tier_Costs").get_values().to_dict()
-
-    # # --- Supplier A Details ---
-    # if x.get('A', 0) > 0.001:
-    #     output_lines.append(f"  - Supplier A: {int(round(x['A']))} units")
-    #     if x_a_tier.get(1, 0) > 0.001:
-    #         cost = tier_costs.get(('A', 1), 0)
-    #         output_lines.append(f"      - Tier 1 Active: {int(round(x_a_tier[1]))} units @ ${cost:.2f}/unit")
-    #     if x_a_tier.get(2, 0) > 0.001:
-    #         cost = tier_costs.get(('A', 2), 0)
-    #         output_lines.append(f"      - Tier 2 Active: {int(round(x_a_tier[2]))} units @ ${cost:.2f}/unit")
-
-    # # --- Supplier B Details ---
-    # if x.get('B', 0) > 0.001:
-    #     cost = tier_costs.get(('B', 1), 0)
-    #     output_lines.append(f"  - Supplier B: {int(round(x['B']))} units")
-    #     output_lines.append(f"      - Fixed Rate: ${cost:.2f}/unit")
-
-    # # --- Supplier C Details ---
-    # if x.get('C', 0) > 0.001:
-    #     output_lines.append(f"  - Supplier C: {int(round(x['C']))} units")
-    #     if x_c_tier.get(1, 0) > 0.001:
-    #         cost = tier_costs.get(('C', 1), 0)
-    #         output_lines.append(f"      - Purchased in Tier 1: {int(round(x_c_tier[1]))} units @ ${cost:.2f}/unit")
-    #     if x_c_tier.get(2, 0) > 0.001:
-    #         cost = tier_costs.get(('C', 2), 0)
-    #         output_lines.append(f"      - Purchased in Tier 2: {int(round(x_c_tier[2]))} units @ ${cost:.2f}/unit")
-
     return ampl, optimal_sequence, output_lines
 
 def generate_greedy_sequence(s_param, engines):
