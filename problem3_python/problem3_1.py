@@ -92,8 +92,8 @@ def solve_model(model_file, data_file, crew_node, power_node):
 
 
 if __name__ == "__main__":
-    MODEL_FILE = "MCFP.mod"
-    DATA_FILE = "MCFP.dat"
+    MODEL_FILE = "MCFP_3_1.mod"
+    DATA_FILE = "MCFP_3_1.dat"
 
     scenarios = [
         (1, "3p"),
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     print(output_content)
 
     if os.getenv("AMPLHW_OUTPUT"):
-        output_filename = "problem3.amplout"
+        output_filename = "problem3_1.amplout"
         with open(output_filename, "w") as f:
             f.write(output_content)
         print(f"\nOutput also written to {output_filename}")
