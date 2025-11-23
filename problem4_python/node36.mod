@@ -14,9 +14,11 @@ subject to CtrAlum: sum {p in P} alum[p]*x[p]+SlackAlum=maxAlum;
 subject to CtrHour: sum {p in P} hours[p]*x[p]+SlackHours=maxHour;
 
 # Branch and Bound Constraints
-subject to node09: x['WingSpar'] <= 169;
-subject to node10: x['WingRib'] >= 106;
-subject to node12: x['WingSpar'] <= 167;
-subject to node13: x['WingRib'] >= 107;
-subject to node15: x['WingSpar'] <= 166;
-subject to node16: x['WingRib'] >= 108;
+subject to node09: x['WingSpar'] <= 168;
+subject to node23: x['WingRib'] <= 105;
+subject to node24: x['FuselagePanel'] >= 1;
+subject to node30: x['WingRib'] <= 104;
+subject to node31: x['FuselagePanel'] >=2;
+subject to node33: x['WingRib'] <= 103;
+subject to node34: x['FuselagePanel'] >= 3;
+subject to node36: x['WingSpar'] <= 167;
