@@ -145,8 +145,8 @@ def solve_model(model_file, data_file):
     return ampl, optimal_sequence, output_lines
 
 if __name__ == "__main__":
-    MODEL_FILE = "problem3.mod"
-    DATA_FILE = "problem3.dat"
+    MODEL_FILE = "MCFP.mod"
+    DATA_FILE = "MCFP.dat"
     
     # --- Solve the Model for the Optimal Solution ---
     ampl, optimal_sequence, output = solve_model(MODEL_FILE, DATA_FILE)
