@@ -121,8 +121,7 @@ def solve_model(model_file, data_file, crew_node, power_node):
 
     ampl.getParameter("b").set(crew_node, 1)
     ampl.getParameter("b").set(power_node, -1)
-    print(ampl.get_parameter("b").get_values().to_string())
-
+    
     print("Solving model...")
     if os.getenv("AMPLHW_OUTPUT"):
         ampl.eval(r"solve;")
@@ -134,16 +133,38 @@ def solve_model(model_file, data_file, crew_node, power_node):
     
     # --- Build up the detailed output ---
     output_lines = []
-    output_lines.append(f"Objective value (Total Time): {objective_value:,.2f}")
-    output_lines.append("-" * 30)
-    return ampl, output_lines
+    output_lines.append(f"Time for crew at Node {crew_node:02d} to get to power station at Node {power_node}:\t{objective_value:,.1f}")
+    return output_lines
 
 if __name__ == "__main__":
     MODEL_FILE = "MCFP.mod"
     DATA_FILE = "MCFP.dat"
     
     # --- Solve the Model for the Optimal Solution ---
-    ampl, output = solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node="3p")
+    output = []
+
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node="3p")
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=18, power_node="3p")
+    output.append("-" * 30)
+    
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node=5)
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=18, power_node=5)
+    output.append("-" * 30)
+
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node="6p")
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=18, power_node="6p")
+    output.append("-" * 30)
+
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node=13)
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=18, power_node=13)
+    output.append("-" * 30)
+
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node="23p")
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=18, power_node="23p")
+    output.append("-" * 30)
+
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node=24)
+    output += solve_model(MODEL_FILE, DATA_FILE, crew_node=18, power_node=24)
     
     # --- Print to console ---
     print("--- Results ---")
