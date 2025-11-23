@@ -100,7 +100,7 @@ import matplotlib.pyplot as plt
 #     plt.savefig(filename, format="pdf", bbox_inches="tight")
 #     print(f"\nGantt chart saved as {filename}")
 
-def solve_model(model_file, data_file):
+def solve_model(model_file, data_file, crew_node, power_node):
     """
     Runs the engine production AMPL model and returns the solved object
     and processed results.
@@ -118,6 +118,10 @@ def solve_model(model_file, data_file):
     ampl.option["gurobi_options"] = "solnsens=1"
     ampl.read(model_file)
     ampl.read_data(data_file)
+
+    ampl.getParameter("b").set(crew_node, 1)
+    ampl.getParameter("b").set(power_node, -1)
+    print(ampl.get_parameter("b").get_values().to_string())
 
     print("Solving model...")
     if os.getenv("AMPLHW_OUTPUT"):
@@ -139,7 +143,7 @@ if __name__ == "__main__":
     DATA_FILE = "MCFP.dat"
     
     # --- Solve the Model for the Optimal Solution ---
-    ampl, output = solve_model(MODEL_FILE, DATA_FILE)
+    ampl, output = solve_model(MODEL_FILE, DATA_FILE, crew_node=1, power_node="3p")
     
     # --- Print to console ---
     print("--- Results ---")
