@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     # --- Build Table ---
     header = f"{'Start':<6} | {'End':<6} | {'Time':<6} | {'Travel Sequence'}"
-    separator = "-" * 100
+    separator = "-" * 60
 
     output_lines = []
     output_lines.append(header)
