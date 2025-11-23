@@ -17,7 +17,8 @@ minimize TotalCost: sum{a in ARCS} c[a]*x[a];
 
 subject to balance {n in NODES}:
     ((n in POWERSTATIONS) and sum{a in ARCS: i[a]=n}x[a]-sum{a in ARCS: j[a]=n}x[a]=-1)
-    or sum{a in ARCS: i[a]=n}x[a]-sum{a in ARCS: j[a]=n}x[a]=supply[n];
+    or
+    ((n not in POWERSTATIONS) and sum{a in ARCS: i[a]=n}x[a]-sum{a in ARCS: j[a]=n}x[a]=supply[n]);
 subject to lower_b {a in ARCS}: x[a] >= lb[a];
 subject to upper_b {a in ARCS}: x[a] <= ub[a];
 
