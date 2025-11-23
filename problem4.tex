@@ -1,4 +1,4 @@
-\section{}
+\section{Production Planning}
 \subsection{}
 The integer problem can be formulated
 \begin{center}
@@ -10,7 +10,7 @@ The integer problem can be formulated
   \end{align*}
 \end{center}
 \subsection{}
-An integer AMPL model has been created for problem 4 and is included as listing \ref{lst:problem4integer}.
+An integer AMPL model has been created for problem 4 and is included as listing \eref{lst:problem4integer}.
 The data file used for this model is included as listing \ref{lst:problem4dat}. It should be noted that 
 the data file is used consistently across all AMPL implementations for problem 4. The output of the integer
 model can be found in listing \ref{lst:problem4integerout}
@@ -52,7 +52,8 @@ integer model was used. The output is included as listing \ref{lst:problem4relax
 The binary search tree for the Branch and Bound search is included as figure \ref{fig:problem4}. Node 32 was
 identified as the optimal solution via the Branch and Bound search. The output for node 32's model is included as
 listing \ref{lst:problem4node32}. The optimal production schedule for the Branch and Bound method match the optimal
-solution identified by the integer AMPL model in listing \ref{lst:problem4integerout}.
+solution identified by the integer AMPL model in listing \ref{lst:problem4integerout}. The model file and output for
+each node has been included in \ref{append:p4nodes} \nameref{append:p4nodes}.
 \begin{tcolorbox}
   \lstinputlisting[numbers=left, numberstyle=\tiny,
     stepnumber=2, numbersep=5pt,
