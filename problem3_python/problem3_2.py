@@ -40,6 +40,11 @@ def solve_model(model_file, data_file):
 
     objective_value = ampl.get_objective("TotalCost").value()
     print("Objective Value:", objective_value)
+    
+    supply = ampl.get_variable("supply").get_values().to_dict()
+    for node, val in supply.items():
+        if val > 0:
+            print("Crew at ", node , " with supply ", val)
 
     # --- Path Reconstruction ---
     # Get flow on arcs
