@@ -1,0 +1,21 @@
+set P := FuselagePanel WingSpar, WingRib;
+
+param sellValue:=
+FuselagePanel 30501
+WingSpar 22525
+WingRib 25811;
+
+
+param hours:=
+FuselagePanel 0.5
+WingSpar 1
+WingRib .3;
+
+param alum:=
+FuselagePanel 3
+WingSpar 2
+WingRib 2.5;
+
+
+param maxAlum 600;
+param maxHour 200;
