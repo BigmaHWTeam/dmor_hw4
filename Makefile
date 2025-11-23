@@ -27,6 +27,11 @@ PROBLEM2_PDFS = $(IMAGES_DIR)/problem2_optimal_gantt.pdf \
 				$(IMAGES_DIR)/problem2_greedy_gantt.pdf \
 				$(IMAGES_DIR)/problem2_commercial_first_gantt.pdf
 
+# --- Problem 3 ---
+PROBLEM3_DIR = problem3_python
+PROBLEM3_SCRIPT = $(PROBLEM3_DIR)/problem3.py
+PROBLEM3_AMPLOUT = $(AMPL_OUTPUT_DIR)/problem3.amplout
+
 # --- Problem 4 ---
 PROBLEM4_DIR = problem4_python
 PROBLEM4_SCRIPT = $(PROBLEM4_DIR)/problem4.py
@@ -45,10 +50,10 @@ IMAGES_DIR = images
 all: $(MAIN).pdf $(PROBLEM2_PDFS) $(PROBLEM4_TREE_PDF)
 
 # Target to run all python scripts
-python_scripts: $(PROBLEM1_AMPLOUT) $(PROBLEM2_AMPLOUT) $(PROBLEM2_PDFS) $(PROBLEM4_AMPLOUT) $(PROBLEM4_TREE_PDF) $(APPENDIX_NODES_TEX)
+python_scripts: $(PROBLEM1_AMPLOUT) $(PROBLEM2_AMPLOUT) $(PROBLEM3_AMPLOUT) $(PROBLEM2_PDFS) $(PROBLEM4_AMPLOUT) $(PROBLEM4_TREE_PDF) $(APPENDIX_NODES_TEX)
 
 # Rule to build the PDF
-$(MAIN).pdf: $(TEX_FILES) $(PROBLEM1_AMPLOUT) $(PROBLEM2_AMPLOUT) $(PROBLEM4_AMPLOUT) $(PROBLEM4_TREE_PDF) $(APPENDIX_NODES_TEX)
+$(MAIN).pdf: $(TEX_FILES) $(PROBLEM1_AMPLOUT) $(PROBLEM2_AMPLOUT) $(PROBLEM3_AMPLOUT) $(PROBLEM4_AMPLOUT) $(PROBLEM4_TREE_PDF) $(APPENDIX_NODES_TEX)
 	$(LATEXMK) -pdf $(MAIN)
 
 # Rule to generate appendix_nodes.tex
@@ -68,6 +73,12 @@ $(PROBLEM2_AMPLOUT) $(PROBLEM2_PDFS): $(PROBLEM2_SCRIPT) | $(AMPL_OUTPUT_DIR) $(
 	cd $(PROBLEM2_DIR) && AMPLHW_OUTPUT=true python $(notdir $(PROBLEM2_SCRIPT))
 	@mv $(PROBLEM2_DIR)/problem2.amplout $(AMPL_OUTPUT_DIR)
 	@mv $(PROBLEM2_DIR)/problem2_*.pdf $(IMAGES_DIR)
+
+# Rule to generate problem3.amplout
+$(PROBLEM3_AMPLOUT): $(PROBLEM3_SCRIPT) | $(AMPL_OUTPUT_DIR)
+	@echo "Running script to generate AMPL output for problem 3"
+	cd $(PROBLEM3_DIR) && AMPLHW_OUTPUT=true python $(notdir $(PROBLEM3_SCRIPT))
+	@mv $(PROBLEM3_DIR)/*.amplout $(AMPL_OUTPUT_DIR)
 
 # Rule to generate problem4.amplout
 $(PROBLEM4_AMPLOUT): $(PROBLEM4_SCRIPT) | $(AMPL_OUTPUT_DIR) $(AMPL_BRANCHBOUND_DIR)
@@ -101,6 +112,7 @@ clean:
 	rm -f *.aux *.bbl *.bcf *.blg *.dvi *.fdb_latexmk *.fls *.log *.out *.pdf *.ps *.run.xml
 	rm -f $(PROBLEM1_AMPLOUT)
 	rm -f $(PROBLEM2_AMPLOUT)
+	rm -f $(PROBLEM3_AMPLOUT)
 	rm -f $(PROBLEM4_AMPLOUT) $(PROBLEM4_TREE_PDF) $(APPENDIX_NODES_TEX)
 
 .PHONY: all clean
