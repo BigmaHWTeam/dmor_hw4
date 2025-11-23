@@ -39,46 +39,47 @@ def solve_model(model_file, data_file):
         }
 
     objective_value = ampl.get_objective("TotalCost").value()
+    print("Objective Value:", objective_value)
 
     # --- Path Reconstruction ---
     # Get flow on arcs
     x = ampl.get_variable("x").get_values().to_dict()
 
-    # Get arc topology
-    param_i = ampl.get_parameter("i").get_values().to_dict()
-    param_j = ampl.get_parameter("j").get_values().to_dict()
+    # # Get arc topology
+    # param_i = ampl.get_parameter("i").get_values().to_dict()
+    # param_j = ampl.get_parameter("j").get_values().to_dict()
 
-    # Map tail -> head for active arcs
-    next_node_map = {}
-    for arc_id, flow in x.items():
-        if abs(flow) > 0.5:  # Active arc
-            u = safe_str(param_i[arc_id])
-            v = safe_str(param_j[arc_id])
-            next_node_map[u] = v
+    # # Map tail -> head for active arcs
+    # next_node_map = {}
+    # for arc_id, flow in x.items():
+    #     if abs(flow) > 0.5:  # Active arc
+    #         u = safe_str(param_i[arc_id])
+    #         v = safe_str(param_j[arc_id])
+    #         next_node_map[u] = v
 
-    # Trace the path
-    path_nodes = []
-    curr = safe_str(crew_node)
-    target = safe_str(power_node)
+    # # Trace the path
+    # path_nodes = []
+    # curr = safe_str(crew_node)
+    # target = safe_str(power_node)
 
-    path_nodes.append(curr)
+    # path_nodes.append(curr)
 
-    # Limit iterations to avoid infinite loops in case of errors
-    max_iter = len(param_i) + 5
-    count = 0
+    # # Limit iterations to avoid infinite loops in case of errors
+    # max_iter = len(param_i) + 5
+    # count = 0
 
-    while curr != target and count < max_iter:
-        if curr in next_node_map:
-            next_n = next_node_map[curr]
-            path_nodes.append(next_n)
-            curr = next_n
-        else:
-            # Path broken or destination not reached
-            path_nodes.append("(end?)")
-            break
-        count += 1
+    # while curr != target and count < max_iter:
+    #     if curr in next_node_map:
+    #         next_n = next_node_map[curr]
+    #         path_nodes.append(next_n)
+    #         curr = next_n
+    #     else:
+    #         # Path broken or destination not reached
+    #         path_nodes.append("(end?)")
+    #         break
+    #     count += 1
 
-    path_str = "->".join(path_nodes)
+    # path_str = "->".join(path_nodes)
 
     return {
         # "start": crew_node,
