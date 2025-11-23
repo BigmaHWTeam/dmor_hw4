@@ -126,69 +126,59 @@ def solve_model(model_file, data_file):
         ampl.solve()
     print("Solve complete.\n")
 
-    objective_value = ampl.get_objective('Time').value()
-    visit_order = ampl.get_variable("v").get_values().to_dict()
-
-    # Determine the optimal sequence
-    sorted_engines = sorted(
-        [engine for engine, order in visit_order.items() if order > 0], 
-        key=lambda e: visit_order[e]
-    )
-    optimal_sequence = [0] + sorted_engines + [0]
+    objective_value = ampl.get_objective('Cost').value()
     
     # --- Build up the detailed output ---
     output_lines = []
     output_lines.append(f"Objective value (Total Time): {objective_value:,.2f}")
     output_lines.append("-" * 30)
-    seq_str = " -> ".join(map(str, optimal_sequence))
-    output_lines.append(f"Optimal Production Sequence: {seq_str}")
-    return ampl, optimal_sequence, output_lines
+    return ampl, output_lines
 
 if __name__ == "__main__":
     MODEL_FILE = "MCFP.mod"
     DATA_FILE = "MCFP.dat"
     
     # --- Solve the Model for the Optimal Solution ---
-    ampl, optimal_sequence, output = solve_model(MODEL_FILE, DATA_FILE)
+    ampl, output = solve_model(MODEL_FILE, DATA_FILE)
     
     # --- Print to console ---
     print("--- Results ---")
     for line in output:
         print(line)
 
-    # --- Get Parameters for Heuristics ---
-    s = ampl.get_parameter("s").get_values().to_dict()
-    p = ampl.get_parameter("p").get_values().to_dict()
-    all_engines = ampl.get_set("E").get_values().to_list()
-    # Filter out the dummy engine '0' for sequencing heuristics
-    production_engines = [e for e in all_engines if e != 0]
+    # # --- Get Parameters for Heuristics ---
+    # s = ampl.get_parameter("s").get_values().to_dict()
+    # p = ampl.get_parameter("p").get_values().to_dict()
+    # all_engines = ampl.get_set("E").get_values().to_list()
+    # # Filter out the dummy engine '0' for sequencing heuristics
+    # production_engines = [e for e in all_engines if e != 0]
 
-    # --- 1. Generate Visualization for Optimal Sequence ---
-    generate_gantt_chart(
-        optimal_sequence, s, p,
-        title="Optimal Production Schedule",
-        filename="problem2_optimal_gantt.pdf"
-    )
+    # # --- 1. Generate Visualization for Optimal Sequence ---
+    # generate_gantt_chart(
+    #     optimal_sequence, s, p,
+    #     title="Optimal Production Schedule",
+    #     filename="problem2_optimal_gantt.pdf"
+    # )
 
-    # --- 2. Generate Visualization for Greedy Heuristic ---
-    greedy_sequence = generate_greedy_sequence(s, production_engines)
-    generate_gantt_chart(
-        greedy_sequence, s, p,
-        title="Greedy (Shortest Setup Time) Heuristic",
-        filename="problem2_greedy_gantt.pdf"
-    )
+    # # --- 2. Generate Visualization for Greedy Heuristic ---
+    # greedy_sequence = generate_greedy_sequence(s, production_engines)
+    # generate_gantt_chart(
+    #     greedy_sequence, s, p,
+    #     title="Greedy (Shortest Setup Time) Heuristic",
+    #     filename="problem2_greedy_gantt.pdf"
+    # )
 
-    # --- 3. Generate Visualizations for Batch Heuristics ---
-    batch_sequences = generate_batch_sequences()
-    generate_gantt_chart(
-        batch_sequences["commercial_first"], s, p,
-        title="Batch Heuristic (Commercial First)",
-        filename="problem2_commercial_first_gantt.pdf"
-    )
+    # # --- 3. Generate Visualizations for Batch Heuristics ---
+    # batch_sequences = generate_batch_sequences()
+    # generate_gantt_chart(
+    #     batch_sequences["commercial_first"], s, p,
+    #     title="Batch Heuristic (Commercial First)",
+    #     filename="problem2_commercial_first_gantt.pdf"
+    # )
 
     # --- Conditionally write to file ---
     if os.getenv("AMPLHW_OUTPUT"):
-        output_filename = "problem2.amplout"
+        output_filename = "problem3.amplout"
         with open(output_filename, "w") as f:
             f.write("\n".join(output))
         print(f"\nOutput also written to {output_filename}")

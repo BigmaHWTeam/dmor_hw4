@@ -2,8 +2,8 @@ set NODES;		# set of nodes
 set ARCS; 		# set of arcs
 
 param c {ARCS};		# cost of traversing arc a in ARCS
-param i {ARCS};		# tail node of arc a : if a=(k,m) then i(a)=k
-param j {ARCS};		# head node of arc a : if a=(k,m) then j(a)=m
+param i {ARCS} symbolic in NODES;		# tail node of arc a : if a=(k,m) then i(a)=k
+param j {ARCS} symbolic in NODES;		# head node of arc a : if a=(k,m) then j(a)=m
 param b {NODES};	# demand/supply of node i in NODES
 param lb {ARCS};	# minimum flow on arc a in ARCS
 param ub {ARCS};	# maximum flow (capacity) on arc a in ARCS
