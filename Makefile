@@ -29,8 +29,8 @@ PROBLEM2_PDFS = $(IMAGES_DIR)/problem2_optimal_gantt.pdf \
 
 # --- Problem 3 ---
 PROBLEM3_DIR = problem3_python
-PROBLEM3_SCRIPT = $(PROBLEM3_DIR)/problem3.py
-PROBLEM3_AMPLOUT = $(AMPL_OUTPUT_DIR)/problem3.amplout
+PROBLEM3_SCRIPT = $(PROBLEM3_DIR)/problem3_1.py $(PROBLEM3_DIR)/problem3_2.py
+PROBLEM3_AMPLOUT = $(AMPL_OUTPUT_DIR)/problem3_1.amplout $(AMPL_OUTPUT_DIR)/problem3_2.amplout
 
 # --- Problem 4 ---
 PROBLEM4_DIR = problem4_python
@@ -76,8 +76,10 @@ $(PROBLEM2_AMPLOUT) $(PROBLEM2_PDFS): $(PROBLEM2_SCRIPT) | $(AMPL_OUTPUT_DIR) $(
 
 # Rule to generate problem3.amplout
 $(PROBLEM3_AMPLOUT): $(PROBLEM3_SCRIPT) | $(AMPL_OUTPUT_DIR)
-	@echo "Running script to generate AMPL output for problem 3"
-	cd $(PROBLEM3_DIR) && AMPLHW_OUTPUT=true python $(notdir $(PROBLEM3_SCRIPT))
+	@echo "Running scripts to generate AMPL output for problem 3"
+	$(foreach script,$(PROBLEM3_SCRIPT), \
+		(cd $(PROBLEM3_DIR) && AMPLHW_OUTPUT=true python $(notdir $(script))); \
+	)
 	@mv $(PROBLEM3_DIR)/*.amplout $(AMPL_OUTPUT_DIR)
 
 # Rule to generate problem4.amplout
