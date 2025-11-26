@@ -74,7 +74,13 @@ to assist with solving the model as well as ensuring setup time for engine 3 is 
         caption={The AMPL output for problem 2.}]{ampl/problem2.amplout}
 \end{tcolorbox}
 \subsection{}
-A Gantt chart for the optimal production sequence has been included in Figure \ref{fig:problem2_3}
+A Gantt chart for the optimal production sequence has been included in Figure \ref{fig:problem2_3}. It was generated 
+using the Gemini 3.0 Pro model with the following prompt:
+\begin{quote}
+Please review the existing python script that generates production schedules. I would like to modify this script to generate 3 independent Gantt charts utilizing the UF Style guide. Let's generate a chart for the optimal setup time from the AMPL model, a greedy agorithm that selects to shortest setup time, using a random selection if there is a tie, and running all commerical engines first followed by military engines. Be sure the Gantt charts display both running time and setup time. Use two different colors to represent the commerical and military engines. Highlight the total setup time at the top of the chart. The output of each chart should be a PDF image. 
+
+Make sure each engine is on it's own line in the Gantt chart. Make sure each engine in the Gantt chart lists both it's setup time and run time in produciton. 
+\end{quote}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/problem2_optimal_gantt.pdf}

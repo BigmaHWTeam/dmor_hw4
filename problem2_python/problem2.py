@@ -1,105 +1,15 @@
-# problem1.py
+# problem2.py
 
 import os
 import random
-from amplpy import AMPL
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from amplpy import AMPL
 
-def generate_gantt_chart(sequence, s_param, p_param, title="Production Schedule Gantt Chart", filename="gantt_chart.pdf"):
-    """
-    Generates and saves a Gantt chart for a given production sequence.
-
-    Args:
-        sequence (list): A list of engine numbers in the order of production.
-        s_param (dict): A dictionary of switchover times from AMPL.
-        p_param (dict): A dictionary of processing times from AMPL.
-        title (str): The title for the Gantt chart.
-        filename (str): The name of the output PDF file.
-    """
-    gantt_data = []
-    total_time = 0.0
-    current_time = 0.0
-
-    engine_types = {1: 'C', 2: 'C', 3: 'C', 4: 'M', 5: 'M'}
-    type_colors = {'C': '#0021A5', 'M': '#FA4616'}
-
-    # Start from the dummy node 0
-    for i in range(len(sequence) - 1):
-        start_engine = sequence[i]
-        end_engine = sequence[i+1]
-
-        # Ensure keys are integers for dictionary lookup
-        switchover_time = s_param.get((start_engine, end_engine), 0)
-        processing_time = p_param.get(end_engine, 0)
-
-        setup_start_time = current_time
-        task_start_time = current_time + switchover_time
-        task_end_time = task_start_time + processing_time
-
-        if end_engine != 0:
-            engine_type = engine_types.get(end_engine)
-            gantt_data.append({
-                'Task': f"Engine {end_engine}",
-                'Setup_Start': setup_start_time,
-                'Setup_Duration': switchover_time,
-                'Task_Start': task_start_time,
-                'Task_Duration': processing_time,
-                'Type': engine_type,
-                'Color': type_colors.get(engine_type)
-            })
-        
-        current_time = task_end_time
-    
-    total_time = current_time
-
-    if not gantt_data:
-        print(f"No tasks with processing time > 0 to plot for {filename}.")
-        return
-
-    fig, ax = plt.subplots(figsize=(12, 6))
-    
-    tasks = [item['Task'] for item in gantt_data]
-    
-    setup_starts = [item['Setup_Start'] for item in gantt_data]
-    setup_durations = [item['Setup_Duration'] for item in gantt_data]
-    
-    task_starts = [item['Task_Start'] for item in gantt_data]
-    task_durations = [item['Task_Duration'] for item in gantt_data]
-    colors = [item['Color'] for item in gantt_data]
-
-    # Plotting setup times
-    ax.barh(tasks, setup_durations, left=setup_starts, height=0.5, 
-            edgecolor="black", color='grey', alpha=0.5, label='Setup Time')
-
-    # Plotting processing times
-    ax.barh(tasks, task_durations, left=task_starts, height=0.5, 
-            edgecolor="black", color=colors, alpha=0.7)
-
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Engine")
-    
-    full_title = f"{title}\nTotal Time: {total_time:.2f}"
-    ax.set_title(full_title)
-    ax.grid(True, which='major', axis='x', linestyle='--', linewidth=0.5)
-
-    # Custom legend
-    from matplotlib.patches import Patch
-    legend_elements = [Patch(facecolor='grey', edgecolor='black', alpha=0.5, label='Setup Time'),
-                       Patch(facecolor=type_colors['C'], edgecolor='black', alpha=0.7, label='Commercial'),
-                       Patch(facecolor=type_colors['M'], edgecolor='black', alpha=0.7, label='Military')]
-    ax.legend(handles=legend_elements)
-
-    for i, task in enumerate(tasks):
-        if setup_durations[i] > 0:
-            ax.text(setup_starts[i] + setup_durations[i] / 2, i, f"{setup_durations[i]}",
-                    ha='center', va='center', color='black', fontweight='bold')
-        if task_durations[i] > 0:
-            ax.text(task_starts[i] + task_durations[i] / 2, i, f"{task_durations[i]}", 
-                    ha='center', va='center', color='white', fontweight='bold')
-    
-    plt.savefig(filename, format="pdf", bbox_inches="tight")
-    print(f"\nGantt chart saved as {filename}")
-
+# UF Style Guide Colors
+UF_ORANGE = "#FA4616"
+UF_BLUE = "#0021A5"
+SETUP_COLOR = "#B0B0B0"  # Neutral Gray for setup
 
 def solve_model(model_file, data_file):
     """
@@ -116,7 +26,8 @@ def solve_model(model_file, data_file):
     """
     ampl = AMPL()
     ampl.option["solver"] = "gurobi"
-    ampl.option["gurobi_options"] = "solnsens=1"
+    # Removed Gurobi sensitivity analysis option as requested
+    # ampl.option["gurobi_options"] = "solnsens=1" 
     ampl.read(model_file)
     ampl.read_data(data_file)
 
@@ -132,7 +43,7 @@ def solve_model(model_file, data_file):
 
     # Determine the optimal sequence
     sorted_engines = sorted(
-        [engine for engine, order in visit_order.items() if order > 0], 
+        [engine for engine, order in visit_order.items() if order > 0 and engine != 0], 
         key=lambda e: visit_order[e]
     )
     optimal_sequence = sorted_engines + [0]
@@ -145,42 +56,161 @@ def solve_model(model_file, data_file):
     output_lines.append(f"Optimal Production Sequence: {seq_str}")
     return ampl, optimal_sequence, output_lines
 
-def generate_greedy_sequence(s_param, engines):
-    """Generates a sequence using a greedy shortest-path heuristic."""
-    print("\nGenerating greedy sequence...")
-    unvisited = list(engines)
-    current_engine = 0
-    sequence = [current_engine]
+def extract_data(ampl):
+    """Extracts parameters s, p, t and node list from AMPL object."""
+    s = ampl.get_parameter('s').get_values().to_dict()
+    p = ampl.get_parameter('p').get_values().to_dict()
+    t = ampl.get_parameter('t').get_values().to_dict()
+    # Nodes are keys in p, excluding 0 (dummy)
+    nodes = [int(i) for i in p.keys() if int(i) != 0]
+    return s, p, t, nodes
 
+def get_greedy_sequence(nodes, s):
+    """Generates a sequence using a greedy algorithm based on shortest setup time."""
+    unvisited = set(nodes)
+    current = 0
+    sequence = [0]
+    
     while unvisited:
-        # Find minimum switchover time to all unvisited engines
-        min_time = float('inf')
-        next_engine_candidates = []
-        for next_engine in unvisited:
-            time = s_param.get((current_engine, next_engine), float('inf'))
-            if time < min_time:
-                min_time = time
-                next_engine_candidates = [next_engine]
-            elif time == min_time:
-                next_engine_candidates.append(next_engine)
+        # Find candidates with min setup time
+        min_setup = float('inf')
+        candidates = []
         
-        # Select next engine (randomly if tied)
-        chosen_engine = random.choice(next_engine_candidates)
-        sequence.append(chosen_engine)
-        unvisited.remove(chosen_engine)
-        current_engine = chosen_engine
-
+        for node in unvisited:
+            setup_time = s.get((current, node), float('inf'))
+            if setup_time < min_setup:
+                min_setup = setup_time
+                candidates = [node]
+            elif setup_time == min_setup:
+                candidates.append(node)
+        
+        # Pick random if tie
+        if not candidates:
+            break # Should not happen given connected graph logic
+        
+        next_node = random.choice(candidates)
+        sequence.append(next_node)
+        unvisited.remove(next_node)
+        current = next_node
+        
     sequence.append(0) # Return to start
-    print(f"Greedy Sequence: {' -> '.join(map(str, sequence))}")
     return sequence
 
-def generate_batch_sequences():
-    """Generates fixed sequences for batch processing."""
-    commercial_first = [0, 1, 2, 3, 4, 5, 0]
-    print("\nGenerated batch sequences.")
-    print(f"Commercial First: {' -> '.join(map(str, commercial_first))}")
-    return {"commercial_first": commercial_first}
+def get_comm_mil_sequence(nodes, t):
+    """Generates a sequence: all Commercial first, then all Military."""
+    # Sort for deterministic output within groups
+    commercial = sorted([n for n in nodes if t[n] == 'C'])
+    military = sorted([n for n in nodes if t[n] == 'M'])
+    
+    return [0] + commercial + military + [0]
 
+def calculate_schedule_metrics(sequence, s, p):
+    """Calculates total setup time and segments for plotting."""
+    total_setup = 0
+    current_time = 0
+    segments = [] # list of (start, duration, type ('setup' or 'run'), engine_id)
+    
+    for i in range(len(sequence) - 1):
+        u, v = sequence[i], sequence[i+1]
+        
+        # Setup
+        setup_time = s.get((u, v), 0)
+        if setup_time > 0:
+            segments.append((current_time, setup_time, 'setup', v))
+            total_setup += setup_time
+            current_time += setup_time
+            
+        # Processing (only if not returning to 0, usually 0 has p=0 anyway)
+        proc_time = p.get(v, 0)
+        if proc_time > 0:
+            segments.append((current_time, proc_time, 'run', v))
+            current_time += proc_time
+            
+    return total_setup, current_time, segments
+
+def plot_gantt(sequence, s, p, t, filename, title):
+    """Generates and saves a Gantt chart with each engine on its own line."""
+    total_setup, total_time, segments = calculate_schedule_metrics(sequence, s, p)
+    
+    # Identify all engines involved (excluding 0)
+    engines = sorted([n for n in t.keys() if n != 0])
+    
+    # Create figure with dynamic height based on number of engines
+    # Height: header + (rows * height_per_row)
+    fig_height = max(4, len(engines) * 0.8 + 2)
+    fig, ax = plt.subplots(figsize=(12, fig_height))
+    
+    # Map engines to Y-axis positions (using index)
+    engine_indices = {e: i for i, e in enumerate(engines)}
+    
+    # Track all time points for vertical lines
+    time_points = {0}
+    
+    for start, duration, seg_type, engine_id in segments:
+        if engine_id == 0: continue
+        
+        row_idx = engine_indices[engine_id]
+        end_time = start + duration
+        time_points.add(end_time)
+        time_points.add(start)
+        
+        if seg_type == 'setup':
+            color = SETUP_COLOR
+            # Draw Setup bar
+            ax.broken_barh([(start, duration)], (row_idx - 0.3, 0.6), 
+                         facecolors=color, edgecolor='black', linewidth=0.5)
+            
+            # Label with setup time
+            if duration >= 1:
+                ax.text(start + duration/2, row_idx, f"{int(duration)}", 
+                       ha='center', va='center', color='black', fontsize=8)
+                
+        else: # Run
+            engine_type = t.get(engine_id, 'None')
+            color = UF_ORANGE if engine_type == 'C' else UF_BLUE if engine_type == 'M' else 'black'
+            
+            # Draw Run bar
+            ax.broken_barh([(start, duration)], (row_idx - 0.3, 0.6), 
+                         facecolors=color, edgecolor='black', linewidth=0.5)
+             
+            # Label with run time
+            if duration >= 2:
+                ax.text(start + duration/2, row_idx, f"{int(duration)}", 
+                       ha='center', va='center', color='white', fontsize=9, fontweight='bold')
+
+    # Add vertical lines for all significant time points
+    for tp in sorted(list(time_points)):
+        ax.axvline(x=tp, color='gray', linestyle='--', linewidth=0.5, alpha=0.5)
+
+    # Formatting
+    ax.set_yticks(range(len(engines)))
+    ax.set_yticklabels([f"Engine {e}" for e in engines])
+    ax.invert_yaxis() # Top to bottom
+    
+    ax.set_xlim(0, total_time * 1.05)
+    ax.set_xlabel('Time', fontsize=12)
+    
+    # X-ticks at specific points
+    sorted_ticks = sorted(list(time_points))
+    ax.set_xticks(sorted_ticks)
+    ax.set_xticklabels([str(int(x)) if x.is_integer() else str(x) for x in sorted_ticks], rotation=45)
+    
+    # Title with Total Setup Highlight
+    full_title = f"{title}\nTotal Setup Time: {total_setup}"
+    ax.set_title(full_title, fontsize=14, pad=15)
+    
+    # Legend
+    patches = [
+        mpatches.Patch(color=UF_ORANGE, label='Commercial (C)'),
+        mpatches.Patch(color=UF_BLUE, label='Military (M)'),
+        mpatches.Patch(color=SETUP_COLOR, label='Setup')
+    ]
+    ax.legend(handles=patches, loc='upper right')
+    
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+    print(f"Generated chart: {filename}")
 
 if __name__ == "__main__":
     MODEL_FILE = "problem2.mod"
@@ -194,35 +224,6 @@ if __name__ == "__main__":
     for line in output:
         print(line)
 
-    # --- Get Parameters for Heuristics ---
-    s = ampl.get_parameter("s").get_values().to_dict()
-    p = ampl.get_parameter("p").get_values().to_dict()
-    all_engines = ampl.get_set("E").get_values().to_list()
-    # Filter out the dummy engine '0' for sequencing heuristics
-    production_engines = [e for e in all_engines if e != 0]
-
-    # --- 1. Generate Visualization for Optimal Sequence ---
-    generate_gantt_chart(
-        optimal_sequence, s, p,
-        title="Optimal Production Schedule",
-        filename="problem2_optimal_gantt.pdf"
-    )
-
-    # --- 2. Generate Visualization for Greedy Heuristic ---
-    greedy_sequence = generate_greedy_sequence(s, production_engines)
-    generate_gantt_chart(
-        greedy_sequence, s, p,
-        title="Greedy (Shortest Setup Time) Heuristic",
-        filename="problem2_greedy_gantt.pdf"
-    )
-
-    # --- 3. Generate Visualizations for Batch Heuristics ---
-    batch_sequences = generate_batch_sequences()
-    generate_gantt_chart(
-        batch_sequences["commercial_first"], s, p,
-        title="Batch Heuristic (Commercial First)",
-        filename="problem2_commercial_first_gantt.pdf"
-    )
 
     # --- Conditionally write to file ---
     if os.getenv("AMPLHW_OUTPUT"):
@@ -230,3 +231,18 @@ if __name__ == "__main__":
         with open(output_filename, "w") as f:
             f.write("\n".join(output))
         print(f"\nOutput also written to {output_filename}")
+        
+    # --- Generate Gantt Charts ---
+    print("\nGenerating Gantt Charts...")
+    s, p, t, nodes = extract_data(ampl)
+    
+    # 1. Optimal Sequence
+    plot_gantt(optimal_sequence, s, p, t, "problem2_optimal_gantt.pdf", "Optimal Production Schedule")
+    
+    # 2. Greedy Sequence
+    greedy_seq = get_greedy_sequence(nodes, s)
+    plot_gantt(greedy_seq, s, p, t, "problem2_greedy_gantt.pdf", "Greedy Algorithm Schedule")
+    
+    # 3. Commercial First Sequence
+    comm_mil_seq = get_comm_mil_sequence(nodes, t)
+    plot_gantt(comm_mil_seq, s, p, t, "problem2_commercial_first_gantt.pdf", "Commercial First Schedule")
