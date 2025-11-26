@@ -6,14 +6,14 @@ def generate_latex():
 
     # Find all node files in problem4_python directory
     mod_files = glob.glob('problem4_python/node*.mod')
-    
+
     # Extract node numbers
     node_numbers = []
     for f in mod_files:
         match = re.search(r'node(\d+)\.mod', f)
         if match:
             node_numbers.append(int(match.group(1)))
-    
+
     # Sort the numbers to ensure correct order
     node_numbers.sort()
 

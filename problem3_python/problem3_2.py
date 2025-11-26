@@ -40,9 +40,9 @@ def solve_model(model_file, data_file):
 
     objective_value = ampl.get_objective("TotalCost").value()
     print(f"Objective Value: {objective_value}")
-    
+
     supply_var = ampl.get_variable("supply").get_values().to_dict()
-    
+
     # Identify source nodes (crews) and their supply amount
     sources = {}
     for node, val in supply_var.items():
@@ -53,12 +53,12 @@ def solve_model(model_file, data_file):
     # --- Path Reconstruction ---
     # Get flow on arcs
     x = ampl.get_variable("x").get_values().to_dict()
-    
+
     # Get arc topology and costs
     param_i = ampl.get_parameter("i").get_values().to_dict()
     param_j = ampl.get_parameter("j").get_values().to_dict()
     param_c = ampl.get_parameter("c").get_values().to_dict()
-    
+
     power_stations_set = ampl.get_set("POWERSTATIONS").get_values().to_list()
     power_stations = set(safe_str(p) for p in power_stations_set)
 
@@ -84,38 +84,38 @@ def solve_model(model_file, data_file):
             path_nodes = [s]
             curr = s
             path_cost = 0
-            
+
             # Simple DFS/Traversal to find a sink with available flow capacity
             # Since this is a valid flow solution, a path must exist.
             while curr not in power_stations:
                 if curr not in adj:
                     path_nodes.append("(stuck)")
                     break
-                
+
                 # Pick next node with flow
                 next_node = None
                 for v, edge_data in adj[curr].items():
                     if edge_data['flow'] > 1e-5:
                         next_node = v
                         break
-                
+
                 if next_node:
                     # Record move
                     edge_data = adj[curr][next_node]
                     path_cost += edge_data['cost']
-                    
+
                     # Decrement flow to mark as used for this unit
                     adj[curr][next_node]['flow'] -= 1.0
                     # Clean up if flow is effectively 0
                     if adj[curr][next_node]['flow'] < 1e-5:
                         del adj[curr][next_node]
-                    
+
                     curr = next_node
                     path_nodes.append(curr)
                 else:
                     path_nodes.append("(dead end)")
                     break
-            
+
             paths.append({
                 "start": s,
                 "end": curr,

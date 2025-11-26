@@ -1,12 +1,17 @@
 set E;
 set T;
 
-param s {i in E, j in E} >=0; # Switchover time from engine i to engine j
-param p {j in E} >=0;         # Processing time for engine j
-param t {i in E} symbolic;    # Type of engine i
+# Switchover time from engine i to engine j
+param s {i in E, j in E} >=0;
+# Processing time for engine j
+param p {j in E} >=0;
+# Type of engine i
+param t {i in E} symbolic;
 
-var x {i in E, j in E} binary;  # 1 if switchover from engine i to engine j
-var v {E} >= 1, <= card(E);     # Order in which engine i is visited
+# 1 if switchover from engine i to engine j
+var x {i in E, j in E} binary;
+# Order in which engine i is visited
+var v {E} >= 1, <= card(E);
 
 
 minimize Time:

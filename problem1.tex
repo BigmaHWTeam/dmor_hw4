@@ -1,6 +1,6 @@
 \section{Procurement}
 \subsection{}
-Table \ref{tab:prepreg_req} contains the calculations determining that 1,000 kg of prepreg are required for the 
+\Cref{tab:prepreg_req} contains the calculations determining that 1,000 kg of prepreg are required for the
 described production schedule.
 \begin{table}[h!]
     \centering
@@ -18,10 +18,10 @@ described production schedule.
     \label{tab:prepreg_req}
 \end{table}
 \subsection{}
-Sets: 
+Sets:
 \begin{itemize}
 \item $S$: The set of suppliers: a, b, and c.
-\item $T$: The set of tiers: 1, and 2. 
+\item $T$: The set of tiers: 1, and 2.
 \end{itemize}
 Decision Variables:
 \begin{itemize}
@@ -43,19 +43,18 @@ Parameters:
   & \sum_{t \in T}y_{a,t} \le 1 \\
   & x_{a,1} \le q_{a,1}y_{a,1} \\
   & x_{a,2} \ge (q_{a,1}+1)y_{a,2} \\
-  & x_{a,2} \le q_{a,2}y_{a,2} \\ 
+  & x_{a,2} \le q_{a,2}y_{a,2} \\
   & x_{b,2} = 0 \\
   & x_{c,1} \le q_{c,1} \\
   & x_{c,1} \ge q_{c,1}y_{c,2} \\
   & x_{c,2} \le (q_{c,2}-q_{c,1})y_{c,2} \\
-  & x_{s,t} \in \{0,\mathbb{Z}^+\} \forall \, s \in S, t \in T \\ 
-  & y_{s,t} \in \{0,1\} \forall   \, s \in S, t \in T  
+  & x_{s,t} \in \{0,\mathbb{Z}^+\} \forall \, s \in S, t \in T \\
+  & y_{s,t} \in \{0,1\} \forall   \, s \in S, t \in T
 \end{align*}
 
 \subsection{}
-An AMPL model has been created to solve this linear program. It is included as listing \ref{lst:problem1mod}. Listing 
-\ref{lst:problem1dat} contains the relevant data used for the model and the output of the model is contained in 
-listing \ref{lst:problem1out}. The python code to run the model and generate output can be found in \ref{append:p1}.
+An AMPL model has been created to solve this linear program. It is included as \cref{lst:problem1mod}. \Cref{lst:problem1dat} contains the relevant data used for the model and the output of the model is contained in
+\cref{lst:problem1out}. The python code to run the model and generate output can be found in \cref{append:p1}.
 \begin{tcolorbox}
     \lstinputlisting[numbers=left, numberstyle=\tiny,
         stepnumber=2, numbersep=5pt,

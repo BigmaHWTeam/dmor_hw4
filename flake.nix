@@ -52,6 +52,7 @@
               framed
               pdfcol
               physics
+              cleveref
               rsfs
               tikzfill
               tcolorbox

@@ -34,7 +34,7 @@
 % ==================================================
 % Document Structure and Formatting
 % ==================================================
-\usepackage[page]{appendix}     % Appendix handling
+\usepackage[page, title]{appendix}     % Appendix handling
 \usepackage[shortlabels]{enumitem} % Advanced lists
 \usepackage{framed}             % Framed environments
 \usepackage{multicol}           % Multiple columns
@@ -58,12 +58,6 @@
 \lstset{showstringspaces=false, upquote=true, breaklines=true, basicstyle=\ttfamily}
 
 % ==================================================
-% Citations and References
-% ==================================================
-% \usepackage{biblatex} % Modern citation management
-% \addbibresource{/home/katyl/Zotero/zotero.bib}
-
-% ==================================================
 % Colors and Hyperlinks
 % ==================================================
 \usepackage{xcolor}     % Color support
@@ -71,17 +65,25 @@
 \definecolor{links}{rgb}{0.36,0.54,0.66}
 \hypersetup{
   colorlinks=true,
-  linkcolor=black,
-  urlcolor=blue,
-  citecolor=blue,
-  filecolor=blue,
+  linkcolor=links,
+  urlcolor=links,
+  citecolor=links,
+  filecolor=links,
   pdfauthor={\myname},
   pdftitle={\assignment},
   pdfsubject={\classname},
   pdfkeywords={\keywords},
   pdfproducer={LaTeX},
-  pdfcreator={pdfLaTeX},
+  pdfcreator={pdflatex},
 }
+
+% ==================================================
+% Citations and References
+% ==================================================
+\usepackage[nameinlink]{cleveref}   % Enhances referencing commands
+\crefname{figure}{figure}{figures}
+% \usepackage{biblatex} % Modern citation management
+% \addbibresource{/home/katyl/Zotero/zotero.bib}
 
 % ==================================================
 % Miscellaneous

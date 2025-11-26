@@ -32,7 +32,7 @@ def run_ampl_model(model_file, data_file):
 
     # --- Build up the detailed output ---
     output_lines = []
-    
+
     # Get objective value
     objective_value = ampl.get_objective('Cost').value()
     output_lines.append(f"Objective value (Total Cost): ${objective_value:,.2f}")
@@ -71,7 +71,7 @@ def run_ampl_model(model_file, data_file):
         if x.get(('C', 2), 0) > 0.001:
             cost = tier_costs.get(('C', 2), 0)
             output_lines.append(f"      - Purchased in Tier 2: {int(round(x[('C', 2)]))} units @ ${cost:.2f}/unit")
-    
+
     # --- Print to console ---
     print("--- Results ---")
     for line in output_lines:
@@ -89,6 +89,6 @@ if __name__ == "__main__":
     # --- Define Problem Specifics ---
     MODEL_FILE = "problem1.mod"
     DATA_FILE = "problem1.dat"
-    
+
     # --- Run the AMPL model ---
     run_ampl_model(MODEL_FILE, DATA_FILE)

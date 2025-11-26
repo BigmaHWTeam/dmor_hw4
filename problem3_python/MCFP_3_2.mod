@@ -1,14 +1,18 @@
 set NODES;		    # set of nodes
 set ARCS; 		    # set of arcs
 set POWERSTATIONS;  # set of nodes with powerstations
-
-param c {ARCS};		                    # cost of traversing arc a in ARCS
-param i {ARCS} symbolic in NODES;		# tail node of arc a : if a=(k,m) then i(a)=k
-param j {ARCS} symbolic in NODES;		# head node of arc a : if a=(k,m) then j(a)=m
-param lb {ARCS};	                    # minimum flow on arc a in ARCS
-param ub {ARCS};	                    # maximum flow (capacity) on arc a in ARCS
-
-param number_of_crews;                  # number of repair crews available
+# cost of traversing arc a in ARCS
+param c {ARCS};		                    
+# tail node of arc a : if a=(k,m) then i(a)=k
+param i {ARCS} symbolic in NODES;		
+# head node of arc a : if a=(k,m) then j(a)=m
+param j {ARCS} symbolic in NODES;		
+# minimum flow on arc a in ARCS
+param lb {ARCS};	                    
+# maximum flow (capacity) on arc a in ARCS
+param ub {ARCS};	                    
+# number of repair crews available
+param number_of_crews;                  
 
 var x{a in ARCS};	# flow on arc a in A
 var supply {NODES} >= 0; # outflow from Nodes where repair crews at

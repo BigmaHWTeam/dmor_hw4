@@ -17,7 +17,7 @@
     \end{itemize}
     Decision variables:
     \begin{itemize}
-      \item $x_{ij}$: yes or no on whether to do the switchover (or setup) of 
+      \item $x_{ij}$: yes or no on whether to do the switchover (or setup) of
         engine $i \in E$ to engine $j \in E$
       \item $v_{i}$: the order in which engine $i \in E$ is visited
     \end{itemize}
@@ -48,12 +48,11 @@
       \end{align*}
     \end{center}
 \subsection{}
-An AMPL model has been created to solve this linear program. It is included as listing \ref{lst:problem2mod}. Listing 
-\ref{lst:problem2dat} contains the relevant data used for the model and the output of the model is contained in 
-listing \ref{lst:problem2out}. The python code to run the model and generate output can be found in \ref{append:p2}.
+An AMPL model has been created to solve this linear program. It is included as \cref{lst:problem2mod}. \Cref{lst:problem2dat} contains the relevant data used for the model and the output of the model is contained in
+\cref{lst:problem2out}. The python code to run the model and generate output can be found in \cref{append:p2}.
 The output shows that the optimal production sequence is
 \[5 \rightarrow 2 \rightarrow 1 \rightarrow 4 \rightarrow 3\]
-with a total production time (makespan) of 64 hours. The 0 shown in listing \ref{lst:problem2out} acts as a source/sink node
+with a total production time (makespan) of 64 hours. The 0 shown in \cref{lst:problem2out} acts as a source/sink node
 to assist with solving the model as well as ensuring setup time for engine 3 is included in the objective value.
 \begin{tcolorbox}
     \lstinputlisting[numbers=left, numberstyle=\tiny,
@@ -74,12 +73,12 @@ to assist with solving the model as well as ensuring setup time for engine 3 is 
         caption={The AMPL output for problem 2.}]{ampl/problem2.amplout}
 \end{tcolorbox}
 \subsection{}
-A Gantt chart for the optimal production sequence has been included in Figure \ref{fig:problem2_3}. It was generated 
+A Gantt chart for the optimal production sequence has been included in \cref{fig:problem2_3}. It was generated
 using the Gemini 3.0 Pro model with the following prompt:
 \begin{quote}
-Please review the existing python script that generates production schedules. I would like to modify this script to generate 3 independent Gantt charts utilizing the UF Style guide. Let's generate a chart for the optimal setup time from the AMPL model, a greedy agorithm that selects to shortest setup time, using a random selection if there is a tie, and running all commerical engines first followed by military engines. Be sure the Gantt charts display both running time and setup time. Use two different colors to represent the commerical and military engines. Highlight the total setup time at the top of the chart. The output of each chart should be a PDF image. 
+Please review the existing python script that generates production schedules. I would like to modify this script to generate 3 independent Gantt charts utilizing the UF Style guide. Let's generate a chart for the optimal setup time from the AMPL model, a greedy agorithm that selects to shortest setup time, using a random selection if there is a tie, and running all commerical engines first followed by military engines. Be sure the Gantt charts display both running time and setup time. Use two different colors to represent the commerical and military engines. Highlight the total setup time at the top of the chart. The output of each chart should be a PDF image.
 
-Make sure each engine is on it's own line in the Gantt chart. Make sure each engine in the Gantt chart lists both it's setup time and run time in produciton. 
+Make sure each engine is on it's own line in the Gantt chart. Make sure each engine in the Gantt chart lists both it's setup time and run time in produciton.
 \end{quote}
 \begin{figure}[H]
     \centering
@@ -89,7 +88,7 @@ Make sure each engine is on it's own line in the Gantt chart. Make sure each eng
 \end{figure}
 \subsection{}
 Gantt charts for the greedy (shortest setup time) and commercial first production schedule have been
-included as figures \ref{fig:problem2_4a} and \ref{fig:problem2_4b} respectively. One can see that the
+included as \cref{fig:problem2_4a} and \cref{fig:problem2_4b} respectively. One can see that the
 optimal schedule results in a total setup time of 23 hours. The greedy, shortest time first schedule results in a setup
 time of 24 hours. The commercial first implementation has a setup time of 26 hours. The naieve commercial first approach
 results in the least efficient use of time, while the greedy implementation finds a good but not optimal solution.
