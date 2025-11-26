@@ -223,11 +223,6 @@ if __name__ == "__main__":
         title="Batch Heuristic (Commercial First)",
         filename="problem2_commercial_first_gantt.pdf"
     )
-    # generate_gantt_chart( # Removed as per user request
-    #     batch_sequences["military_first"], s, p,
-    #     title="Batch Heuristic (Military First)",
-    #     filename="problem2_military_first_gantt.pdf"
-    # )
 
     # --- Conditionally write to file ---
     if os.getenv("AMPLHW_OUTPUT"):
