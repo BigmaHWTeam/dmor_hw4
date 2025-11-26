@@ -90,13 +90,14 @@ Make sure each engine is on it's own line in the Gantt chart. Make sure each eng
 \subsection{}
 Gantt charts for the greedy (shortest setup time) and commercial first production schedule have been
 included as figures \ref{fig:problem2_4a} and \ref{fig:problem2_4b} respectively. One can see that the
-greedy schedule results in the same exact production sequence as the optimal schedule with a makespan of 64 hours.
-The commercial first schedule results in a different production sequence than the optimal schedule:
-\[1 \rightarrow 2 \rightarrow 3 \rightarrow 4 \rightarrow 5\]
-with a makespan of 67 hours.
+optimal schedule results in a total setup time of 23 hours. The greedy, shortest time first schedule results in a setup
+time of 24 hours. The commercial first implementation has a setup time of 26 hours. The naieve commercial first approach
+results in the least efficient use of time, while the greedy implementation finds a good but not optimal solution.
+Using Linear Programming techniques results in an hour savings over the produciton cycle, which when expanded over multiple
+cycles would represent a significant time savings.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{images/problem2_optimal_gantt.pdf}
+    \includegraphics[width=\textwidth]{images/problem2_greedy_gantt.pdf}
     \caption{Greedy Gantt Chart}
     \label{fig:problem2_4a}
 \end{figure}
