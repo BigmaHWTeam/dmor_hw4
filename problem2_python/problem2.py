@@ -26,8 +26,6 @@ def solve_model(model_file, data_file):
     """
     ampl = AMPL()
     ampl.option["solver"] = "gurobi"
-    # Removed Gurobi sensitivity analysis option as requested
-    # ampl.option["gurobi_options"] = "solnsens=1"
     ampl.read(model_file)
     ampl.read_data(data_file)
 

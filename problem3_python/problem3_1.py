@@ -15,7 +15,6 @@ def solve_model(model_file, data_file, crew_node, power_node):
     """
     ampl = AMPL()
     ampl.option["solver"] = "gurobi"
-    ampl.option["gurobi_options"] = "solnsens=1"
 
     # Suppress solver output to keep console clean for the table
     ampl.option["solver_msg"] = 0

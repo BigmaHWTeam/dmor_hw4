@@ -16,7 +16,6 @@ def run_ampl_model(model_file, data_file):
 
     # Set solver and options
     ampl.option["solver"] = "gurobi"
-    ampl.option["gurobi_options"] = "solnsens=1"
 
     # Read the model and data files
     ampl.read(model_file)
