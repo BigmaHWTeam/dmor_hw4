@@ -1,15 +1,112 @@
 \section{Emergency Crew Location}
 \subsection{}
+In this problem, we can represent the locations as nodes in a directed graph.
+Each power station or candidate location for an emergency crew is located at a node.
+For the case where power stations or candidate locations are located between intersections,
+we added an additional "prime" node to represent this halfway location.
+You will see these prime nodes in the data file are indicaed with a suffix of "p".
+The arcs between the nodes represent the possible routes that crews can take to reach
+different locations with each arc having a cost representing travel time between locations.
+The objective is to minimize the total travel cost while ensuring that all areas are covered by at least one crew.
+
+The problem can be formulated as follows.
+    \\
+    \\
+    Sets:
+    \begin{itemize}
+      \item $N$: the set of nodes (power stations, candidate locations, intersections)
+      \item $A$: the set of arcs (roads) between nodes
+    \end{itemize}
+    Parameters:
+    \begin{itemize}
+      \item $c_{a}$:  cost of traversing road (arc) $a \in A$
+      \item $i_{a}$:  tail node of arc $a \in A$
+      \item $j_{a}$:  head node of arc $a \in A$
+      \item $b_{n}$:  supply (number of power stations serviced by crew) or demand (number of power stations) at node $n \in N$
+      \item $lb_{a}$: lower bound on flow for arc $a \in A$
+      \item $ub_{a}$: upper bound on flow for arc $a \in A$
+    \end{itemize}
+    Decision variables:
+    \begin{itemize}
+      \item $x_{a}$: flow on arc $a \in A$
+    \end{itemize}
+
+    Compact formulation capturing objective function and constraints:
+    \begin{center}
+      \begin{align*}
+        \min\quad & \sum_{a \in A} c_{a}*x_{a}
+        \\
+        \text{s.t.}\quad
+        & \sum_{a \in A: i_{a} = n}x_{a} - \sum_{a \in A: j_{a} = n}x_{a} = b_{n},\; \quad \forall n \in N
+        \\
+        & x_{a} \geq lb_{a},\; \quad \forall a \in A
+        \\
+        & x_{a} \leq ub_{a},\; \quad \forall a \in A
+        \\
+        & i_{a} \in N,\; \quad \forall a \in A
+        \\
+        & j_{a} \in N,\; \quad \forall a \in A
+      \end{align*}
+    \end{center}
 This problem was solved using the MCFP model provided. The data file was constructed to represent the arcs 
-between the nodes and is included in \ref{append:p3dat} as listing \ref{lst:appendp31dat}. The output of the model is included as
-listing \ref{lst:problem31out}.
+between the nodes and is included as listsing \ref{lst:problem31dat}. The output of the model is included as
+listing \ref{lst:problem31out}. The output indicates that the crew at Node 1 should repair
+the power stations at Nodes 3p, 5, and 6p, while the crew at Node 18 should repair the
+power stations at Nodes 13, 23p, and 24. The total travel cost for the crew at Node 1 is 16.5,
+while the total travel cost for the crew at Node 18 is 30.5. The overall total travel cost is 47.0.
 \begin{tcolorbox}
   \lstinputlisting[numbers=left, numberstyle=\tiny,
     stepnumber=2, numbersep=5pt,
     basicstyle=\small\fontencoding{T1}\selectfont, label={lst:problem31out},
     caption={An AMPL output for the Problem 3.1}]{ampl/problem3_1.amplout}
 \end{tcolorbox}
+
 \subsection{}
+The problem can be formulated as follows.
+    \\
+    \\
+    Sets:
+    \begin{itemize}
+      \item $N$: the set of nodes (power stations, candidate locations, intersections)
+      \item $A$: the set of arcs (roads) between nodes
+      \item $P$: the set of power stations
+    \end{itemize}
+    Parameters:
+    \begin{itemize}
+      \item $c_{a}$:  cost of traversing road (arc) $a \in A$
+      \item $i_{a}$:  tail node of arc $a \in A$
+      \item $j_{a}$:  head node of arc $a \in A$
+      \item $lb_{a}$: lower bound on flow for arc $a \in A$
+      \item $ub_{a}$: upper bound on flow for arc $a \in A$
+      \item $z$:      number of crews available
+    \end{itemize}
+    Decision variables:
+    \begin{itemize}
+      \item $x_{a}$: flow on arc $a \in A$
+      \item $s_{n}$: outflow from node $n \in N$ where a repair crew is located
+    \end{itemize}
+
+    Compact formulation capturing objective function and constraints:
+    \begin{center}
+      \begin{align*}
+        \min\quad & \sum_{a \in A} c_{a}*x_{a}
+        \\
+        \text{s.t.}\quad
+        & \sum_{a \in A: i_{a} = n}x_{a} - \sum_{a \in A: j_{a} = n}x_{a} = -1,\; \quad \forall n \in N: n \in P
+        \\
+        & \sum_{a \in A: i_{a} = n}x_{a} - \sum_{a \in A: j_{a} = n}x_{a} = s_{n},\; \quad \forall n \in N: n \not\in P
+        \\
+        & x_{a} \geq lb_{a},\; \quad \forall a \in A
+        \\
+        & x_{a} \leq ub_{a},\; \quad \forall a \in A
+        \\
+        & i_{a} \in N,\; \quad \forall a \in A
+        \\
+        & j_{a} \in N,\; \quad \forall a \in A
+        \\
+        & s_{n} \geq 0,\; \quad \forall n \in N
+      \end{align*}
+    \end{center}
 This problem was solved using a modified MCFP model included as \ref{lst:problem32mod}. The data file was constructed to represent the arcs 
 between the nodes and is included in \ref{append:p3dat} as listsing \ref{lst:appendp32dat}. The output of the model is included as
 listing \ref{lst:problem32out}.
