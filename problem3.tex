@@ -110,6 +110,19 @@ The problem can be formulated as follows.
 This problem was solved using a modified MCFP model included as \ref{lst:problem32mod}. The data file was constructed to represent the arcs 
 between the nodes and is included in \ref{append:p3dat} as listsing \ref{lst:appendp32dat}. The output of the model is included as
 listing \ref{lst:problem32out}.
+
+The output indicates that the optimal locations when only two crews are at Nodes 3 and 23.
+The crew at Node 3 should repair the power stations at Nodes 5, 3p, and 6p.
+The total travel cost for the crew at Node 3 is 16.5.
+The crew at Node 23 should repair the power stations at Nodes 13, 23p, and 24.
+The total travel cost for the crew at Node 23 is 24.0.
+The overall total travel cost is 40.5.
+
+With the addition of a 3rd crew, the optimal locations for the three crews are at Nodes 3, 13, and 23.
+The crew at Node 3 should still repair the power stations at Nodes 5, 3p, and 6p, and the travel cost is still 16.5.
+The crew at Node 13 should repair the power station at Node 13, resulting in a total travel cost of 0.0.
+The crew at Node 23 should now only epair the power stations at Nodes 23p and 24, resulting in a total travel cost of 16.0.
+The overall total travel cost is 32.5.
 \begin{tcolorbox}
   \lstinputlisting[numbers=left, numberstyle=\tiny,
     stepnumber=2, numbersep=5pt,
