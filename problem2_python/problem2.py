@@ -176,9 +176,8 @@ def plot_gantt(sequence, s, p, t, filename, title):
                 ax.text(start + duration/2, row_idx, f"{int(duration)}",
                        ha='center', va='center', color='white', fontsize=9, fontweight='bold')
 
-    # Add vertical lines for all significant time points
-    for tp in sorted(list(time_points)):
-        ax.axvline(x=tp, color='gray', linestyle='--', linewidth=0.5, alpha=0.5)
+    # Add vertical grid lines (evenly spaced)
+    ax.grid(True, axis='x', linestyle='--', linewidth=0.5, alpha=0.5)
 
     # Formatting
     ax.set_yticks(range(len(engines)))
@@ -187,11 +186,6 @@ def plot_gantt(sequence, s, p, t, filename, title):
 
     ax.set_xlim(0, total_time * 1.05)
     ax.set_xlabel('Time', fontsize=12)
-
-    # X-ticks at specific points
-    sorted_ticks = sorted(list(time_points))
-    ax.set_xticks(sorted_ticks)
-    ax.set_xticklabels([f"{x:g}" for x in sorted_ticks], rotation=45)
 
     # Title with Total Setup Highlight
     full_title = f"{title}\nTotal Setup Time: {total_setup}"
