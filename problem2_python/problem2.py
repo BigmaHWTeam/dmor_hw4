@@ -135,7 +135,7 @@ def solve_model(model_file, data_file):
         [engine for engine, order in visit_order.items() if order > 0], 
         key=lambda e: visit_order[e]
     )
-    optimal_sequence = [0] + sorted_engines + [0]
+    optimal_sequence = sorted_engines + [0]
     
     # --- Build up the detailed output ---
     output_lines = []

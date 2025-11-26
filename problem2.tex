@@ -1,6 +1,8 @@
 \section{Scheduling}
 \subsection{}
-	The problem can be formulated as follows:
+	The problem can be formulated as follows.
+    \\
+    \\
     Sets:
     \begin{itemize}
       \item $E$: the set of engines
@@ -30,6 +32,8 @@
         \\
         & \sum_{j \in E} x_{ij} = 1,\; \quad \forall i \in E
         \\
+        & v_{i} - v_{j} + \abs{E} x_{ij} \leq \abs{E} - 1,\; \forall i,j \in E, i \neq j
+        \\
         & x_{i,i} = 0,\; \quad \forall i \in E
         \\
         & s_{i,j} \geq 0,\; \quad \forall i,j \in E
@@ -40,13 +44,17 @@
         \\
         & x_{ij} \in \{0,1\},\; \forall i,j \in E, i \neq j
         \\
-        & 0 \leq v_{i} \leq \abs{E},\; \forall i \in E
+        & 1 \leq v_{i} \leq \abs{E},\; \forall i \in E
       \end{align*}
     \end{center}
 \subsection{}
 An AMPL model has been created to solve this linear program. It is included as listing \ref{lst:problem2mod}. Listing 
 \ref{lst:problem2dat} contains the relevant data used for the model and the output of the model is contained in 
 listing \ref{lst:problem2out}. The python code to run the model and generate output can be found in \ref{append:p2}.
+The output shows that the optimal production sequence is
+\[5 \rightarrow 2 \rightarrow 1 \rightarrow 4 \rightarrow 3\]
+with a total production time (makespan) of 64 hours. The 0 shown in listing \ref{lst:problem2out} acts as a source/sink node
+to assist with solving the model as well as ensuring setup time for engine 3 is included in the objective value.
 \begin{tcolorbox}
     \lstinputlisting[numbers=left, numberstyle=\tiny,
         stepnumber=2, numbersep=5pt,
@@ -75,7 +83,11 @@ A Gantt chart for the optimal production sequence has been included in Figure \r
 \end{figure}
 \subsection{}
 Gantt charts for the greedy (shortest setup time) and commercial first production schedule have been
-included as figures \ref{fig:problem2_4a} and \ref{fig:problem2_4b} respectively.
+included as figures \ref{fig:problem2_4a} and \ref{fig:problem2_4b} respectively. One can see that the
+greedy schedule results in the same exact production sequence as the optimal schedule with a makespan of 64 hours.
+The commercial first schedule results in a different production sequence than the optimal schedule:
+\[1 \rightarrow 2 \rightarrow 3 \rightarrow 4 \rightarrow 5\]
+with a makespan of 67 hours.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/problem2_optimal_gantt.pdf}
