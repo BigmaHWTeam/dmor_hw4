@@ -193,7 +193,7 @@ def plot_gantt(sequence, s, p, t, filename, title):
     # X-ticks at specific points
     sorted_ticks = sorted(list(time_points))
     ax.set_xticks(sorted_ticks)
-    ax.set_xticklabels([str(int(x)) if x.is_integer() else str(x) for x in sorted_ticks], rotation=45)
+    ax.set_xticklabels([f"{x:g}" for x in sorted_ticks], rotation=45)
 
     # Title with Total Setup Highlight
     full_title = f"{title}\nTotal Setup Time: {total_setup}"
