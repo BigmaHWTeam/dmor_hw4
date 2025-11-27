@@ -86,10 +86,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.BUILD_FILE }}.pdf
-          path: ${{ env.BUILD_FILE }}.pdf
+          path: build/${{ env.BUILD_FILE }}.pdf
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ env.BUILD_FILE }}.pdf
+
