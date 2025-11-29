@@ -1,7 +1,7 @@
 set P := FuselagePanel WingSpar, WingRib;
 
 param sellValue:=
-FuselagePanel 30501
+FuselagePanel 30051
 WingSpar 22525
 WingRib 25811;
 

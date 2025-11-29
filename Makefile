@@ -16,12 +16,14 @@ APPENDIX_NODES_TEX = appendix_nodes.tex
 # --- Problem 1 ---
 PROBLEM1_DIR = problem1_python
 PROBLEM1_SCRIPT = $(PROBLEM1_DIR)/problem1.py
+PROBLEM1_DEPS = $(wildcard $(PROBLEM1_DIR)/*.mod) $(wildcard $(PROBLEM1_DIR)/*.dat)
 AMPL_OUTPUT_DIR = ampl
 PROBLEM1_AMPLOUT = $(AMPL_OUTPUT_DIR)/problem1.amplout
 
 # --- Problem 2 ---
 PROBLEM2_DIR = problem2_python
 PROBLEM2_SCRIPT = $(PROBLEM2_DIR)/problem2.py
+PROBLEM2_DEPS = $(wildcard $(PROBLEM2_DIR)/*.mod) $(wildcard $(PROBLEM2_DIR)/*.dat)
 PROBLEM2_AMPLOUT = $(AMPL_OUTPUT_DIR)/problem2.amplout
 PROBLEM2_PDFS = $(IMAGES_DIR)/problem2_optimal_gantt.pdf \
 				$(IMAGES_DIR)/problem2_greedy_gantt.pdf \
@@ -30,11 +32,13 @@ PROBLEM2_PDFS = $(IMAGES_DIR)/problem2_optimal_gantt.pdf \
 # --- Problem 3 ---
 PROBLEM3_DIR = problem3_python
 PROBLEM3_SCRIPT = $(PROBLEM3_DIR)/problem3_1.py $(PROBLEM3_DIR)/problem3_2.py
+PROBLEM3_DEPS = $(wildcard $(PROBLEM3_DIR)/*.mod) $(wildcard $(PROBLEM3_DIR)/*.dat)
 PROBLEM3_AMPLOUT = $(AMPL_OUTPUT_DIR)/problem3_1.amplout $(AMPL_OUTPUT_DIR)/problem3_2.amplout
 
 # --- Problem 4 ---
 PROBLEM4_DIR = problem4_python
 PROBLEM4_SCRIPT = $(PROBLEM4_DIR)/problem4.py
+PROBLEM4_DEPS = $(wildcard $(PROBLEM4_DIR)/*.mod) $(wildcard $(PROBLEM4_DIR)/*.dat)
 PROBLEM4_NODE_MODS = $(wildcard $(PROBLEM4_DIR)/node*.mod)
 AMPL_BRANCHBOUND_DIR = $(AMPL_OUTPUT_DIR)/branchbound
 PROBLEM4_NODE_AMPLOUTS = $(patsubst $(PROBLEM4_DIR)/%.mod, $(AMPL_BRANCHBOUND_DIR)/%.amplout, $(PROBLEM4_NODE_MODS))
@@ -62,20 +66,20 @@ $(APPENDIX_NODES_TEX): $(APPENDIX_GEN_SCRIPT)
 	python3 $(APPENDIX_GEN_SCRIPT) > $(APPENDIX_NODES_TEX)
 
 # Rule to generate problem1.amplout
-$(PROBLEM1_AMPLOUT): $(PROBLEM1_SCRIPT) | $(AMPL_OUTPUT_DIR)
+$(PROBLEM1_AMPLOUT): $(PROBLEM1_SCRIPT) $(PROBLEM1_DEPS) | $(AMPL_OUTPUT_DIR)
 	@echo "Running script to generate AMPL output for problem 1"
 	cd $(PROBLEM1_DIR) && AMPLHW_OUTPUT=true python $(notdir $(PROBLEM1_SCRIPT))
 	@mv $(PROBLEM1_DIR)/*.amplout $(AMPL_OUTPUT_DIR)
 
 # Rule to generate problem2.amplout and PDFs
-$(PROBLEM2_AMPLOUT) $(PROBLEM2_PDFS): $(PROBLEM2_SCRIPT) | $(AMPL_OUTPUT_DIR) $(IMAGES_DIR)
+$(PROBLEM2_AMPLOUT) $(PROBLEM2_PDFS): $(PROBLEM2_SCRIPT) $(PROBLEM2_DEPS) | $(AMPL_OUTPUT_DIR) $(IMAGES_DIR)
 	@echo "Running script to generate AMPL output and PDFs for problem 2"
 	cd $(PROBLEM2_DIR) && AMPLHW_OUTPUT=true python $(notdir $(PROBLEM2_SCRIPT))
 	@mv $(PROBLEM2_DIR)/problem2.amplout $(AMPL_OUTPUT_DIR)
 	@mv $(PROBLEM2_DIR)/problem2_*.pdf $(IMAGES_DIR)
 
 # Rule to generate problem3.amplout
-$(PROBLEM3_AMPLOUT): $(PROBLEM3_SCRIPT) | $(AMPL_OUTPUT_DIR)
+$(PROBLEM3_AMPLOUT): $(PROBLEM3_SCRIPT) $(PROBLEM3_DEPS) | $(AMPL_OUTPUT_DIR)
 	@echo "Running scripts to generate AMPL output for problem 3"
 	$(foreach script,$(PROBLEM3_SCRIPT), \
 		(cd $(PROBLEM3_DIR) && AMPLHW_OUTPUT=true python $(notdir $(script))); \
@@ -83,7 +87,7 @@ $(PROBLEM3_AMPLOUT): $(PROBLEM3_SCRIPT) | $(AMPL_OUTPUT_DIR)
 	@mv $(PROBLEM3_DIR)/*.amplout $(AMPL_OUTPUT_DIR)
 
 # Rule to generate problem4.amplout
-$(PROBLEM4_AMPLOUT): $(PROBLEM4_SCRIPT) | $(AMPL_OUTPUT_DIR) $(AMPL_BRANCHBOUND_DIR)
+$(PROBLEM4_AMPLOUT): $(PROBLEM4_SCRIPT) $(PROBLEM4_DEPS) | $(AMPL_OUTPUT_DIR) $(AMPL_BRANCHBOUND_DIR)
 	@echo "Running script to generate AMPL output for problem 4"
 	cd $(PROBLEM4_DIR) && AMPLHW_OUTPUT=true python $(notdir $(PROBLEM4_SCRIPT))
 	@mv $(PROBLEM4_DIR)/integer.amplout $(AMPL_OUTPUT_DIR)

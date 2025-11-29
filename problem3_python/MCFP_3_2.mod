@@ -15,7 +15,7 @@ param ub {ARCS};
 param number_of_crews;                  
 
 var x{a in ARCS};	# flow on arc a in A
-var supply {NODES} >= 0; # outflow from Nodes where repair crews at
+var supply {NODES} >= 0; # outflow from Nodes where repair crews are at
 
 minimize TotalCost: sum{a in ARCS} c[a]*x[a];
 
