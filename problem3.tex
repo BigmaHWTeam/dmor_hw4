@@ -4,7 +4,7 @@ In this problem, we can represent the locations as nodes in a directed graph.
 Each power station or candidate location for an emergency crew is located at a node.
 For the case where power stations or candidate locations are located between intersections,
 we added an additional ``prime node'' to represent this halfway location.
-You will see these prime nodes in the data file are indicaed with a suffix of ``p''.
+You will see these prime nodes in the data file are indicates with a suffix of ``p''.
 The arcs between the nodes represent the possible routes that crews can take to reach
 different locations with each arc having a cost representing travel time between locations.
 The objective is to minimize the total travel cost while ensuring that all areas are covered by at least one crew.
@@ -34,7 +34,7 @@ The problem can be formulated as follows.
     Compact formulation capturing objective function and constraints:
     \begin{center}
       \begin{align*}
-        \min\quad & \sum_{a \in A} c_{a}*x_{a}
+        \min\quad & \sum_{a \in A} c_{a}x_{a}
         \\
         \text{s.t.}\quad
         & \sum_{a \in A: i_{a} = n}x_{a} - \sum_{a \in A: j_{a} = n}x_{a} = b_{n},\; \quad \forall n \in N
