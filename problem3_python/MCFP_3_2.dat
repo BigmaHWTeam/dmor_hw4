@@ -1,6 +1,6 @@
 set POWERSTATIONS := "3p", 5, "6p", 13, "23p", 24;
 
-param number_of_crews := 2;
+
 
 param: ARCS:	c	lb	ub	i	j:=
 	1	2	0	100	1	2

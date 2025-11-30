@@ -51,8 +51,9 @@
 An AMPL model has been created to solve this linear program. It is included as \cref{lst:problem2mod}. \Cref{lst:problem2dat} contains the relevant data used for the model and the output of the model is contained in
 \cref{lst:problem2out}. The python code to run the model and generate output can be found in \cref{append:p2}.
 The output shows that the optimal production sequence is
-\[5 \rightarrow 2 \rightarrow 1 \rightarrow 4 \rightarrow 3\]
-with a total production time (makespan) of 64 hours. The 0 shown in \cref{lst:problem2out} acts as a source/sink node
+$5 \rightarrow 2 \rightarrow 1 \rightarrow 4 \rightarrow 3$
+with a total production time (makespan) of 64 hours and a total setup time of 23 hours.
+The 0 shown in \cref{lst:problem2out} acts as a source/sink node
 to assist with solving the model as well as ensuring setup time for engine 3 is included in the objective value.
 \begin{tcolorbox}
     \lstinputlisting[numbers=left, numberstyle=\tiny,

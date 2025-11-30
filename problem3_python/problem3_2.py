@@ -9,7 +9,7 @@ def safe_str(val):
     return str(val)
 
 
-def solve_model(model_file, data_file):
+def solve_model(model_file, data_file, num_crews):
     """
     Runs the AMPL model and returns the cost and path.
     """
@@ -21,6 +21,8 @@ def solve_model(model_file, data_file):
 
     ampl.read(model_file)
     ampl.read_data(data_file)
+    
+    ampl.param["number_of_crews"] = num_crews
 
     if os.getenv("AMPLHW_OUTPUT"):
         ampl.eval(r"solve;")
@@ -30,12 +32,12 @@ def solve_model(model_file, data_file):
     # Check if solved successfully
     result = ampl.get_value("solve_result")
     if result != "solved":
-        return {
-            # "start": crew_node,
-            # "end": power_node,
+        return float("inf"), [{
+            "start": "Error",
+            "end": "Error",
             "cost": float("inf"),
             "path": "Infeasible/Error",
-        }
+        }]
 
     objective_value = ampl.get_objective("TotalCost").value()
     print(f"Objective Value: {objective_value}")
@@ -123,37 +125,49 @@ def solve_model(model_file, data_file):
             })
             remaining_supply -= 1.0
 
-    return paths
+    return objective_value, paths
 
 
 if __name__ == "__main__":
     MODEL_FILE = "MCFP_3_2.mod"
     DATA_FILE = "MCFP_3_2.dat"
+    
+    crew_counts = [2, 3]
+    combined_output = []
 
-    # Print a loading message if running interactively
-    if not os.getenv("AMPLHW_OUTPUT"):
-        print("Calculating optimal paths...")
+    for n_crews in crew_counts:
+        # Print a loading message if running interactively
+        if not os.getenv("AMPLHW_OUTPUT"):
+            print(f"\n--- Calculating optimal paths for {n_crews} crews ---")
 
-    all_paths = solve_model(MODEL_FILE, DATA_FILE)
+        obj_val, all_paths = solve_model(MODEL_FILE, DATA_FILE, n_crews)
 
-    # --- Build Table ---
-    header = f"{'Start':<6} | {'End':<6} | {'Time':<6} | {'Travel Sequence'}"
-    separator = "-" * 60
+        # --- Build Table Section ---
+        header_text = f"Results for {n_crews} Crews"
+        table_header = f"{'Start':<6} | {'End':<6} | {'Time':<6} | {'Travel Sequence'}"
+        separator = "-" * 60
+        
+        section_lines = []
+        section_lines.append(header_text)
+        section_lines.append(f"Objective Value: {obj_val}")
+        section_lines.append(table_header)
+        section_lines.append(separator)
 
-    output_lines = []
-    output_lines.append(header)
-    output_lines.append(separator)
+        for r in all_paths:
+            start_s = str(r["start"])
+            end_s = str(r["end"])
+            cost_s = f"{r['cost']:.1f}"
+            path_s = r["path"]
 
-    for r in all_paths:
-        start_s = str(r["start"])
-        end_s = str(r["end"])
-        cost_s = f"{r['cost']:.1f}"
-        path_s = r["path"]
+            line = f"{start_s:<6} | {end_s:<6} | {cost_s:<6} | {path_s}"
+            section_lines.append(line)
+        
+        # Add a blank line between sections
+        section_lines.append("") 
+        
+        combined_output.extend(section_lines)
 
-        line = f"{start_s:<6} | {end_s:<6} | {cost_s:<6} | {path_s}"
-        output_lines.append(line)
-
-    output_content = "\n".join(output_lines)
+    output_content = "\n".join(combined_output)
 
     print(output_content)
 
