@@ -10,7 +10,7 @@ on:
 
 jobs:
   run_python:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: python:3.10
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
           path: appendix_nodes.tex
 
   build_latex:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: run_python
     container:
       image: cristiangreco/pdflatex:latest
@@ -78,9 +78,11 @@ jobs:
 
       - name: Build PDF
         run: |
+          # Install make
+          apk add --no-cache make || (apt-get update && apt-get install -y make)
           # Ensure timestamps are correct so make doesn't try to re-run python
           touch images/* ampl/* appendix_nodes.tex
-          latexmk -pdf ${{ env.BUILD_FILE }}.tex
+          make
 
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v4
